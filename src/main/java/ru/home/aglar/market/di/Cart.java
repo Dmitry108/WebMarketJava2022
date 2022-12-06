@@ -10,18 +10,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Component
-@Scope("prototype")
+//@Component
+//@Scope("prototype")
 public class Cart {
     private List<Product> cartList;
     private ProductRepository repository;
 
-    @PostConstruct
+//    @PostConstruct
     private void initCart() {
         cartList = new ArrayList<>();
     }
 
-    @Autowired
+//    @Autowired
     private void setRepository(ProductRepository repository) {
         this.repository = repository;
     }

@@ -6,11 +6,11 @@ import ru.home.aglar.market.model.Product;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
-@Component
+//@Component
 public class SimpleProductRepository implements ProductRepository {
     private List<Product> products;
 
-    @PostConstruct
+//    @PostConstruct
     private void initRepo() {
         products = List.of(
                 new Product(1, "Звездолёт", 3000),
