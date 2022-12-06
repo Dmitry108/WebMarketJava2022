@@ -4,10 +4,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.home.aglar.market.di.Cart;
 import ru.home.aglar.market.di.ProductRepository;
-import ru.home.aglar.market.model.Product;
-
-import java.util.List;
-import java.util.Scanner;
 
 public class MarketApp {
     public static void main(String[] args) {
@@ -16,7 +12,6 @@ public class MarketApp {
         System.out.println("Список товаров:");
         repo.getAllProducts().forEach(System.out::println);
 
-        Scanner sc = new Scanner(System.in);
         System.out.println("В корзину №1 добавлены id 1, 2, 5");
         Cart cart1 = context.getBean(Cart.class);
         cart1.addProduct(1);
