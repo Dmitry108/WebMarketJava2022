@@ -1,28 +1,20 @@
-package ru.home.aglar.market.di;
+package ru.home.aglar.market.di.xml;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import ru.home.aglar.market.model.Product;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-//@Component
-//@Scope("prototype")
 public class Cart {
     private List<Product> cartList;
     private ProductRepository repository;
 
-//    @PostConstruct
-    private void initCart() {
+    public void initCart() {
         cartList = new ArrayList<>();
     }
 
-//    @Autowired
-    private void setRepository(ProductRepository repository) {
+    public void setRepository(ProductRepository repository) {
         this.repository = repository;
     }
 

@@ -2,12 +2,13 @@ package ru.home.aglar.market.main;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import ru.home.aglar.market.di.Cart;
-import ru.home.aglar.market.di.ProductRepository;
+import ru.home.aglar.market.di.config.AppConfig;
+import ru.home.aglar.market.di.config.Cart;
+import ru.home.aglar.market.di.config.ProductRepository;
 
-public class MarketApp {
+public class MarketAppConfig {
     public static void main(String[] args) {
-        ApplicationContext context = new AnnotationConfigApplicationContext("ru.home.aglar.market");
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         ProductRepository repo = context.getBean(ProductRepository.class);
         System.out.println("Список товаров:");
         repo.getAllProducts().forEach(System.out::println);
