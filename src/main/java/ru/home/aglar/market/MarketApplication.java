@@ -7,6 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MarketApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ru.home.aglar.market.MarketApplication.class, args);
+		SpringApplication.run(MarketApplication.class, args);
 	}
 }
