@@ -4,9 +4,7 @@ import org.springframework.stereotype.Component;
 import ru.home.aglar.market.model.Product;
 
 import javax.annotation.PostConstruct;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class SimpleProductRepository implements ProductRepository {
@@ -14,13 +12,13 @@ public class SimpleProductRepository implements ProductRepository {
 
     @PostConstruct
     private void initRepo() {
-        products = List.of(
+        products = new ArrayList<>(List.of(
                 new Product(1, "Звездолёт", 3000),
                 new Product(2, "Летающая тарелка", 4200),
                 new Product(3, "Реактивный самолёт", 2800),
                 new Product(4, "Воздушный шар", 600),
                 new Product(5, "НЛО", 6666)
-        );
+        ));
     }
 
     @Override
@@ -39,7 +37,11 @@ public class SimpleProductRepository implements ProductRepository {
     }
 
     @Override
-    public boolean addAllProducts(Collection<Product> products) {
-        return products.addAll(products);
+    public long generateId() {
+        if (products.isEmpty()) return 1;
+        long max = products.stream().max((p1, p2) ->
+                p1.getId() > p2.getId() ? 1 : -1)
+                .get().getId();
+        return ++max;
     }
 }

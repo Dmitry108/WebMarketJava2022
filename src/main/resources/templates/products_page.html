@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Проодукты</title>
+    <title>Продукты</title>
 </head>
 <body>
     <h2>Список продуктов</h2>
@@ -11,6 +11,7 @@
             <span th:text="${product.id + ': ' + product.title}"/>
         </a>
     </div>
-    <h3 th:text="${'Всего продуктов: ' + products.size}"/>
+    <h3 th:text="${'Всего продуктов: ' + products.size}"/><br>
+    <a th:href="@{'/add_product_form'}">Добавить новый продукт</a>
 </body>
 </html>

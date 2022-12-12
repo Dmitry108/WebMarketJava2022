@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.home.aglar.market.model.Product;
 import ru.home.aglar.market.repositories.ProductRepository;
 
 @Controller
@@ -26,5 +27,19 @@ public class ProductsController {
     private String getProductInfo(Model model, @RequestParam(name = "product_id") long id) {
         model.addAttribute("product", repository.getProductById(id));
         return "product_info_page";
+    }
+
+    @GetMapping("/add_product_form")
+    private String showAddProductForm() {
+        return "add_product_page";
+    }
+
+    @GetMapping("/add_product")
+    private String addProduct(@RequestParam String title, @RequestParam Integer cost) {
+        long id = repository.generateId();
+        if (repository.addProduct(new Product(id, title, cost)))
+            return "redirect:/products";
+        else
+            return null;
     }
 }
