@@ -11,4 +11,5 @@ public interface ProductRepository {
     Product getProductById(long id);
     boolean addProduct(Product product);
     long generateId();
+    void updateProduct(Product product);
 }

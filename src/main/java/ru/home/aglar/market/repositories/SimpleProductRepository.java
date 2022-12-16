@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 @Component
 public class SimpleProductRepository implements ProductRepository {
@@ -30,7 +31,8 @@ public class SimpleProductRepository implements ProductRepository {
 
     @Override
     public Product getProductById(long id) {
-        return products.stream().filter(p -> id == p.getId()).findAny().orElse(null);
+        Product product = products.stream().filter(p -> id == p.getId()).findAny().orElse(null);
+        return new Product(product.getId(), product.getTitle(), product.getCost());
     }
 
     @Override
@@ -45,5 +47,10 @@ public class SimpleProductRepository implements ProductRepository {
                         p1.getId() > p2.getId() ? 1 : -1)
                 .get().getId();
         return ++max;
+    }
+
+    @Override
+    public void updateProduct(Product product) {
+        products.replaceAll(p -> p.getId().equals(product.getId()) ? product : p);
     }
 }

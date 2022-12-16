@@ -17,4 +17,15 @@ public class ProductService {
     public List<Product> getProducts() {
         return productRepository.getAllProducts();
     }
+
+    public boolean changeProductCost(Long id, Integer delta) {
+        Product product = productRepository.getProductById(id);
+        int newCost = product.getCost() + delta;
+        if (newCost >= 0) {
+            product.setCost(newCost);
+            productRepository.updateProduct(product);
+            return true;
+        }
+        return false;
+    }
 }

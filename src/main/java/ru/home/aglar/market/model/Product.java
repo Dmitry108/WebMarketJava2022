@@ -26,4 +26,9 @@ public class Product {
     public void setCost(Integer cost) {
         this.cost = cost;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Product(id = %d, title = \"%s\", cost = %d)", id, title, cost);
+    }
 }
