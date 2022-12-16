@@ -12,4 +12,5 @@ public interface ProductRepository {
     boolean addProduct(Product product);
     long generateId();
     void updateProduct(Product product);
+    void deleteProduct(Long id);
 }

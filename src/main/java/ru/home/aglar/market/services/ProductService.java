@@ -28,4 +28,8 @@ public class ProductService {
         }
         return false;
     }
+
+    public void deleteProduct(Long id) {
+        productRepository.deleteProduct(id);
+    }
 }

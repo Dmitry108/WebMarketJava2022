@@ -1,6 +1,7 @@
 package ru.home.aglar.market.controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.home.aglar.market.model.Product;
@@ -24,5 +25,10 @@ public class ProductController {
     @GetMapping("/change_cost")
     public void changeCost(@RequestParam Long id, @RequestParam Integer delta) {
         productService.changeProductCost(id, delta);
+    }
+
+    @GetMapping("/delete_product/{id}")
+    public void deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
     }
 }

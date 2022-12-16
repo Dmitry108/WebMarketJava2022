@@ -7,7 +7,6 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.UnaryOperator;
 
 @Component
 public class SimpleProductRepository implements ProductRepository {
@@ -52,5 +51,10 @@ public class SimpleProductRepository implements ProductRepository {
     @Override
     public void updateProduct(Product product) {
         products.replaceAll(p -> p.getId().equals(product.getId()) ? product : p);
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+        products.removeIf(p -> p.getId().equals(id));
     }
 }

@@ -15,11 +15,16 @@ angular.module('market', []).controller('MarketController', function ($scope, $h
                     id: id,
                     delta: delta
                 }}
-
             ).then(function(response) {
                 $scope.loadProducts();
-
             });
         };
+    $scope.deleteProduct = function(id) {
+        $http.get(contextPath + '/delete_product/' + id)
+            .then(function() {
+                $scope.loadProducts()
+                }
+            );
+    };
     $scope.loadProducts();
 });
