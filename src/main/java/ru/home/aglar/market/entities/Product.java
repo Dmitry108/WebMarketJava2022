@@ -19,6 +19,12 @@ public class Product {
     public Product() {
     }
 
+    public Product(Long id, String title, Integer price) {
+        this.id = id;
+        this.title = title;
+        this.price = price;
+    }
+
     public Long getId() {
         return id;
     }

@@ -1,16 +1,12 @@
 package ru.home.aglar.market.repositories;
 
-import org.springframework.stereotype.Component;
-import ru.home.aglar.market.model.Product;
+import ru.home.aglar.market.entities.Product;
 
 import java.util.List;
 
-@Component
 public interface ProductRepository {
-    List<Product> getAllProducts();
-    Product getProductById(long id);
-    boolean addProduct(Product product);
-    long generateId();
-    void updateProduct(Product product);
-    void deleteProduct(Long id);
+    Product findProductById(Long id);
+    List<Product> findAllProducts();
+    boolean deleteProductById(Long id);
+    void saveOrUpdate(Product product);
 }

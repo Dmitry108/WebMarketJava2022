@@ -1,9 +1,9 @@
 package ru.home.aglar.market.services;
 
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import ru.home.aglar.market.model.Product;
+import ru.home.aglar.market.entities.Product;
 import ru.home.aglar.market.repositories.ProductRepository;
+import ru.home.aglar.market.repositories.SimpleProductRepository;
 
 import java.util.List;
 
@@ -16,21 +16,21 @@ public class ProductService {
     }
 
     public List<Product> getProducts() {
-        return productRepository.getAllProducts();
+        return productRepository.findAllProducts();
     }
 
     public boolean changeProductCost(Long id, Integer delta) {
-        Product product = productRepository.getProductById(id);
-        int newCost = product.getCost() + delta;
+        Product product = productRepository.findProductById(id);
+        int newCost = product.getPrice() + delta;
         if (newCost >= 0) {
-            product.setCost(newCost);
-            productRepository.updateProduct(product);
+            product.setPrice(newCost);
+            productRepository.saveOrUpdate(product);
             return true;
         }
         return false;
     }
 
     public void deleteProduct(Long id) {
-        productRepository.deleteProduct(id);
+        productRepository.deleteProductById(id);
     }
 }

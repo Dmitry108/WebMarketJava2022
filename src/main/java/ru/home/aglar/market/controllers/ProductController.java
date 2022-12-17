@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.home.aglar.market.model.Product;
+import ru.home.aglar.market.entities.Product;
 import ru.home.aglar.market.services.ProductService;
 
 import java.util.List;

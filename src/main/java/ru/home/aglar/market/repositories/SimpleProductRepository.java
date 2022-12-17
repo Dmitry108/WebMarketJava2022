@@ -1,7 +1,8 @@
 package ru.home.aglar.market.repositories;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
-import ru.home.aglar.market.model.Product;
+import ru.home.aglar.market.entities.Product;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
+@Primary
 public class SimpleProductRepository implements ProductRepository {
     private List<Product> products;
 
@@ -23,23 +25,6 @@ public class SimpleProductRepository implements ProductRepository {
         ));
     }
 
-    @Override
-    public List<Product> getAllProducts() {
-        return Collections.unmodifiableList(products);
-    }
-
-    @Override
-    public Product getProductById(long id) {
-        Product product = products.stream().filter(p -> id == p.getId()).findAny().orElse(null);
-        return new Product(product.getId(), product.getTitle(), product.getCost());
-    }
-
-    @Override
-    public boolean addProduct(Product product) {
-        return products.add(product);
-    }
-
-    @Override
     public long generateId() {
         if (products.isEmpty()) return 1;
         long max = products.stream().max((p1, p2) ->
@@ -49,12 +34,28 @@ public class SimpleProductRepository implements ProductRepository {
     }
 
     @Override
-    public void updateProduct(Product product) {
-        products.replaceAll(p -> p.getId().equals(product.getId()) ? product : p);
+    public Product findProductById(Long id) {
+        return products.stream().filter(p -> id.equals(p.getId())).findAny().orElse(null);
     }
 
     @Override
-    public void deleteProduct(Long id) {
-        products.removeIf(p -> p.getId().equals(id));
+    public List<Product> findAllProducts() {
+        return Collections.unmodifiableList(products);
+    }
+
+    @Override
+    public boolean deleteProductById(Long id) {
+        return products.removeIf(p -> p.getId().equals(id));
+    }
+
+    @Override
+    public void saveOrUpdate(Product product) {
+        products.stream().filter(p -> p.getId().equals(product.getId()))
+            .findAny()
+            .ifPresentOrElse(p -> {
+                p.setTitle(product.getTitle());
+                p.setPrice(product.getPrice());
+                }, () -> products.add(new Product(generateId(), product.getTitle(), product.getPrice()))
+        );
     }
 }
