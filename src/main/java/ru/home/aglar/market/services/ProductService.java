@@ -1,12 +1,13 @@
 package ru.home.aglar.market.services;
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ru.home.aglar.market.model.Product;
 import ru.home.aglar.market.repositories.ProductRepository;
 
 import java.util.List;
 
-@Component
+@Service
 public class ProductService {
     private final ProductRepository productRepository;
 
