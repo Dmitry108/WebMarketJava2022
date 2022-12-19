@@ -1,9 +1,9 @@
 package ru.home.aglar.market.services;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.home.aglar.market.entities.Product;
 import ru.home.aglar.market.repositories.ProductRepository;
-import ru.home.aglar.market.repositories.SimpleProductRepository;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
 public class ProductService {
     private final ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(@Qualifier("ProductDaoComponent") ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 

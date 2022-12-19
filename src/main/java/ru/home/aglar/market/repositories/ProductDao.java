@@ -1,11 +1,13 @@
 package ru.home.aglar.market.repositories;
 
 import org.hibernate.Session;
+import org.springframework.stereotype.Component;
 import ru.home.aglar.market.entities.Product;
 import ru.home.aglar.market.utils.SessionFactoryUtils;
 
 import java.util.List;
 
+@Component("ProductDaoComponent")
 public class ProductDao implements ProductRepository {
     private final SessionFactoryUtils factory;
 
@@ -28,7 +30,8 @@ public class ProductDao implements ProductRepository {
     public List<Product> findAllProducts() {
         try (Session session = factory.getSession()) {
             session.beginTransaction();
-            List<Product> products = session.createQuery("SELECT product FROM Product product").getResultList();
+            List<Product> products = session.createQuery(
+                    "SELECT product FROM Product product ORDER BY product.id").getResultList();
             session.getTransaction().commit();
             return products;
         }

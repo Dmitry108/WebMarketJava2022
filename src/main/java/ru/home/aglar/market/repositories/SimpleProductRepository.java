@@ -1,6 +1,5 @@
 package ru.home.aglar.market.repositories;
 
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import ru.home.aglar.market.entities.Product;
 
@@ -10,7 +9,6 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
-@Primary
 public class SimpleProductRepository implements ProductRepository {
     private List<Product> products;
 
