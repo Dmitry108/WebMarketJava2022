@@ -8,12 +8,11 @@ import ru.home.aglar.market.utils.SessionFactoryUtils;
 import java.util.List;
 
 @Component("ProductDaoComponent")
-public class ProductDao implements ProductRepository {
+public class ProductDaoImpl implements ProductDAO {
     private final SessionFactoryUtils factory;
 
-    public ProductDao(SessionFactoryUtils factory) {
+    public ProductDaoImpl(SessionFactoryUtils factory) {
         this.factory = factory;
-        this.factory.init();
     }
 
     @Override
