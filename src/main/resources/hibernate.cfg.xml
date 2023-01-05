@@ -17,5 +17,6 @@
 
         <mapping class="ru.home.aglar.market.entities.Product"/>
         <mapping class="ru.home.aglar.market.entities.Customer"/>
+        <mapping class="ru.home.aglar.market.entities.Order"/>
     </session-factory>
 </hibernate-configuration>

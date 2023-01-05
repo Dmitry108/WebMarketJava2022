@@ -3,7 +3,6 @@ package ru.home.aglar.market.repositories;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.home.aglar.market.entities.Customer;
 import ru.home.aglar.market.entities.Product;
 import ru.home.aglar.market.utils.SessionFactoryUtils;
 
@@ -58,17 +57,6 @@ public class ProductDaoImpl implements ProductDAO {
             session.beginTransaction();
             session.saveOrUpdate(product);
             session.getTransaction().commit();
-        }
-    }
-
-    @Override
-    public List<Customer> findCustomersOfProduct(Long id) {
-        try (Session session = factory.getSession()){
-            session.beginTransaction();
-            List<Customer> customers = session.get(Product.class, id).getCustomers();
-            customers.size();
-            session.getTransaction().commit();
-            return customers;
         }
     }
 }

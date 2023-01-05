@@ -1,11 +1,8 @@
 package ru.home.aglar.market.services;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.home.aglar.market.entities.Customer;
-import ru.home.aglar.market.entities.Product;
 import ru.home.aglar.market.repositories.CustomerDAO;
-import ru.home.aglar.market.repositories.ProductDAO;
 
 import java.util.List;
 
@@ -27,9 +24,5 @@ public class CustomerService {
     }
 
     public void deleteCustomer(Long id) {customerDAO.deleteCustomerById(id);
-    }
-
-    public List<Product> getProductsOfCustomerById(Long id) {
-        return customerDAO.findProductsOfCustomer(id);
     }
 }

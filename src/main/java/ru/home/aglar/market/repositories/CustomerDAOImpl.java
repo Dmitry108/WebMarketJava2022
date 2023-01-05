@@ -16,7 +16,6 @@ public class CustomerDAOImpl implements CustomerDAO {
 
     @Autowired
     public void init(SessionFactoryUtils factory) {
-        System.out.println(factory);
         this.factory = factory;
     }
 
@@ -58,17 +57,6 @@ public class CustomerDAOImpl implements CustomerDAO {
             session.beginTransaction();
             session.saveOrUpdate(customer);
             session.getTransaction().commit();
-        }
-    }
-
-    @Override
-    public List<Product> findProductsOfCustomer(Long id) {
-        try (Session session = factory.getSession()) {
-            session.beginTransaction();
-            List<Product> products = session.get(Customer.class, id).getProducts();
-            products.size();
-            session.getTransaction().commit();
-            return products;
         }
     }
 }
