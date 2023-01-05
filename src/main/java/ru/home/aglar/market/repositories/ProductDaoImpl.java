@@ -1,7 +1,9 @@
 package ru.home.aglar.market.repositories;
 
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.home.aglar.market.entities.Customer;
 import ru.home.aglar.market.entities.Product;
 import ru.home.aglar.market.utils.SessionFactoryUtils;
 
@@ -9,9 +11,11 @@ import java.util.List;
 
 @Component("ProductDaoComponent")
 public class ProductDaoImpl implements ProductDAO {
-    private final SessionFactoryUtils factory;
+    private SessionFactoryUtils factory;
 
-    public ProductDaoImpl(SessionFactoryUtils factory) {
+    @Autowired
+    public void init(SessionFactoryUtils factory) {
+        System.out.println(factory);
         this.factory = factory;
     }
 
@@ -41,8 +45,6 @@ public class ProductDaoImpl implements ProductDAO {
     public boolean deleteProductById(Long id) {
         try (Session session = factory.getSession()) {
             session.beginTransaction();
-//            Product product = session.get(Product.class, id);
-//            session.delete(product);
         int result = session.createQuery("DELETE FROM Product product WHERE product.id = :id")
                 .setParameter("id", id).executeUpdate();
         session.getTransaction().commit();
@@ -56,6 +58,17 @@ public class ProductDaoImpl implements ProductDAO {
             session.beginTransaction();
             session.saveOrUpdate(product);
             session.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public List<Customer> findCustomersOfProduct(Long id) {
+        try (Session session = factory.getSession()){
+            session.beginTransaction();
+            List<Customer> customers = session.get(Product.class, id).getCustomers();
+            customers.size();
+            session.getTransaction().commit();
+            return customers;
         }
     }
 }

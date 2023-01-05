@@ -22,6 +22,14 @@ public class CustomerService {
         return customerDAO.findAllCustomers();
     }
 
+    public Customer getCustomerById(Long id) {
+        return customerDAO.findCustomerById(id);
+    }
+
     public void deleteCustomer(Long id) {customerDAO.deleteCustomerById(id);
+    }
+
+    public List<Product> getProductsOfCustomerById(Long id) {
+        return customerDAO.findProductsOfCustomer(id);
     }
 }

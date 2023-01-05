@@ -1,6 +1,7 @@
 package ru.home.aglar.market.repositories;
 
 import org.springframework.stereotype.Component;
+import ru.home.aglar.market.entities.Customer;
 import ru.home.aglar.market.entities.Product;
 
 import java.util.List;
@@ -11,4 +12,5 @@ public interface ProductDAO {
     List<Product> findAllProducts();
     boolean deleteProductById(Long id);
     void saveOrUpdate(Product product);
+    List<Customer> findCustomersOfProduct(Long id);
 }

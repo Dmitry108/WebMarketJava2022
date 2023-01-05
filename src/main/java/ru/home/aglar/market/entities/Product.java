@@ -1,6 +1,7 @@
 package ru.home.aglar.market.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -15,6 +16,13 @@ public class Product {
 
     @Column(name = "price")
     private Integer price;
+
+    @ManyToMany
+    @JoinTable(name = "orders",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "customer_id"))
+    private List<Customer> customers;
+
 
     public Product() {
     }
@@ -47,6 +55,14 @@ public class Product {
 
     public void setPrice(Integer price) {
         this.price = price;
+    }
+
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(List<Customer> customers) {
+        this.customers = customers;
     }
 
     @Override

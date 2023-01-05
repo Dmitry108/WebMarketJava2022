@@ -4,9 +4,9 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.home.aglar.market.entities.Customer;
+import ru.home.aglar.market.entities.Product;
 import ru.home.aglar.market.utils.SessionFactoryUtils;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Component
@@ -16,6 +16,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
     @Autowired
     public void init(SessionFactoryUtils factory) {
+        System.out.println(factory);
         this.factory = factory;
     }
 
@@ -31,6 +32,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
     @Override
     public List<Customer> findAllCustomers() {
+        System.out.println(factory.getSession());
         try (Session session = factory.getSession()) {
             session.beginTransaction();
             List<Customer> customers = session.createQuery("SELECT c FROM Customer c ORDER BY id").getResultList();
@@ -56,6 +58,17 @@ public class CustomerDAOImpl implements CustomerDAO {
             session.beginTransaction();
             session.saveOrUpdate(customer);
             session.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public List<Product> findProductsOfCustomer(Long id) {
+        try (Session session = factory.getSession()) {
+            session.beginTransaction();
+            List<Product> products = session.get(Customer.class, id).getProducts();
+            products.size();
+            session.getTransaction().commit();
+            return products;
         }
     }
 }

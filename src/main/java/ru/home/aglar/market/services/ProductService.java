@@ -2,6 +2,7 @@ package ru.home.aglar.market.services;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import ru.home.aglar.market.entities.Customer;
 import ru.home.aglar.market.entities.Product;
 import ru.home.aglar.market.repositories.ProductDAO;
 
@@ -19,6 +20,10 @@ public class ProductService {
         return productRepository.findAllProducts();
     }
 
+    public Product getProductById(Long id) {
+        return  productRepository.findProductById(id);
+    }
+
     public boolean changeProductCost(Long id, Integer delta) {
         Product product = productRepository.findProductById(id);
         int newCost = product.getPrice() + delta;
@@ -32,5 +37,9 @@ public class ProductService {
 
     public void deleteProduct(Long id) {
         productRepository.deleteProductById(id);
+    }
+
+    public List<Customer> getCustomersOfProductById(Long id) {
+        return productRepository.findCustomersOfProduct(id);
     }
 }
