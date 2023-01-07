@@ -4,6 +4,9 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "orders")
+@NamedQueries({
+        @NamedQuery(name = "productsOfCustomer", query = "SELECT order.product FROM Order order WHERE order.customer =: customer")
+})
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

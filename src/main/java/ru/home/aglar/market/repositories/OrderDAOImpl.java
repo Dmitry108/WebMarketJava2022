@@ -44,9 +44,10 @@ public class OrderDAOImpl implements OrderDAO {
     public List<Product> findProductsOfCustomer(Customer customer) {
         try (Session session = factory.getSession()) {
             session.beginTransaction();
-            List<Product> products = session.createQuery("SELECT order.product FROM Order order WHERE order.customer =: customer")
+//            List<Product> products = session.createQuery("SELECT order.product FROM Order order WHERE order.customer =: customer")
+//                    .setParameter("customer", customer).getResultList();
+            List<Product> products = session.createNamedQuery("productsOfCustomer", Product.class)
                     .setParameter("customer", customer).getResultList();
-            products.size();
             session.getTransaction().commit();
             return products;
         }
@@ -56,10 +57,9 @@ public class OrderDAOImpl implements OrderDAO {
     public List<Customer> findCustomersOfProduct(Product product) {
         try (Session session = factory.getSession()){
             session.beginTransaction();
-            List<Customer> customers = session.createQuery("SELECT order.customer FROM Order order WHERE order.product =: product")
+            List<Customer> customers = session.createQuery("SELECT order.customer FROM Order order WHERE order.product =: product", Customer.class)
                     .setParameter("product", product)
                     .getResultList();
-            customers.size();
             session.getTransaction().commit();
             return customers;
         }
