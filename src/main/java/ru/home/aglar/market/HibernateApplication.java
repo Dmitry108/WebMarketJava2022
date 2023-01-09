@@ -1,12 +1,13 @@
 package ru.home.aglar.market;
 
 import ru.home.aglar.market.entities.Product;
-import ru.home.aglar.market.repositories.ProductDao;
+import ru.home.aglar.market.repositories.ProductDaoImpl;
 import ru.home.aglar.market.utils.SessionFactoryUtils;
 
 public class HibernateApplication {
     public static void main(String[] args) {
-        ProductDao repository = new ProductDao(new SessionFactoryUtils());
+        ProductDaoImpl repository = new ProductDaoImpl();
+        repository.init(new SessionFactoryUtils());
         System.out.println(repository.findProductById(1L));
         System.out.println(repository.findAllProducts());
         Product product = new Product();

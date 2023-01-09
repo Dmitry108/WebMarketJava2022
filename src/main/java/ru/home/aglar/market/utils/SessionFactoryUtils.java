@@ -5,10 +5,13 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
 @Component
 public class SessionFactoryUtils {
     private SessionFactory sessionFactory;
 
+    @PostConstruct
     public void init() {
         sessionFactory = new Configuration()
                 .configure("hibernate.cfg.xml")

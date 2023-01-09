@@ -1,6 +1,7 @@
 package ru.home.aglar.market.repositories;
 
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.home.aglar.market.entities.Product;
 import ru.home.aglar.market.utils.SessionFactoryUtils;
@@ -8,12 +9,13 @@ import ru.home.aglar.market.utils.SessionFactoryUtils;
 import java.util.List;
 
 @Component("ProductDaoComponent")
-public class ProductDao implements ProductRepository {
-    private final SessionFactoryUtils factory;
+public class ProductDaoImpl implements ProductDAO {
+    private SessionFactoryUtils factory;
 
-    public ProductDao(SessionFactoryUtils factory) {
+    @Autowired
+    public void init(SessionFactoryUtils factory) {
+        System.out.println(factory);
         this.factory = factory;
-        this.factory.init();
     }
 
     @Override
@@ -42,8 +44,6 @@ public class ProductDao implements ProductRepository {
     public boolean deleteProductById(Long id) {
         try (Session session = factory.getSession()) {
             session.beginTransaction();
-//            Product product = session.get(Product.class, id);
-//            session.delete(product);
         int result = session.createQuery("DELETE FROM Product product WHERE product.id = :id")
                 .setParameter("id", id).executeUpdate();
         session.getTransaction().commit();
