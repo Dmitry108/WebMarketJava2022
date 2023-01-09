@@ -23,6 +23,19 @@ public class ProductService {
         return productRepository.findAll();
     }
 
+    public List<Product> getAllProductsByPriceLow(Integer limit) {
+        return productRepository.findAllByPriceLow(limit);
+    }
+
+    public List<Product> getAllProductsByPriceBetween(Integer min, Integer max) {
+        return productRepository.findAllByPriceBetween(min, max);
+    }
+
+    public List<Product> getAllProductsByPriceHigh(Integer limit) {
+        return productRepository.findAllByPriceHigh(limit);
+    }
+
+
     public Product addProduct(Product product) {
         return productRepository.save(product);
     }

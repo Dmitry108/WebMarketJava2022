@@ -24,6 +24,21 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
+    @GetMapping("/products/low_price")
+    public List<Product> getAllProductsByPriceLow(@RequestParam Integer limit) {
+        return productService.getAllProductsByPriceLow(limit);
+    }
+
+    @GetMapping("/products/between")
+    public List<Product> getAllProductsByPriceBetween(@RequestParam Integer min, @RequestParam Integer max) {
+        return productService.getAllProductsByPriceBetween(min, max);
+    }
+
+    @GetMapping("/products/high_price")
+    public List<Product> getAllProductsByPriceHigh(@RequestParam Integer limit) {
+        return productService.getAllProductsByPriceHigh(limit);
+    }
+
     @PostMapping("/products")
     public Product addNewProduct(@RequestBody Product product) {
         return productService.addProduct(product);
