@@ -1,12 +1,14 @@
 package ru.home.aglar.market.controllers;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.web.bind.annotation.*;
+import ru.home.aglar.market.dto.ProductDto;
 import ru.home.aglar.market.entities.Product;
 import ru.home.aglar.market.services.ProductService;
 
-import java.util.List;
-
 @RestController
+@RequestMapping("/api/v1/products")
 public class ProductController {
     private ProductService productService;
 
@@ -14,38 +16,32 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/products/{id}")
-    public Product getProductById(@PathVariable Long id) {
-        return productService.getProductById(id).get();
+    @GetMapping("{id}")
+    public ProductDto getProductById(@PathVariable Long id) {
+        return new ProductDto(productService.getProductById(id).get());
     }
 
-    @GetMapping("/products")
-    public List<Product> getAllProducts() {
-        return productService.getAllProducts();
+    @GetMapping
+    public Page<ProductDto> getAllProducts(@RequestParam(name = "p", defaultValue = "1") Integer page,
+                                           @RequestParam(name = "min_price", required = false) Integer minPrice,
+                                           @RequestParam(name = "max_price", required = false) Integer maxPrice) {
+        if (page < 1) page = 1;
+        return new PageImpl<>(productService.getAllProducts(page, minPrice, maxPrice)
+                .stream().map(ProductDto::new).toList());
     }
 
-    @GetMapping("/products/low_price")
-    public List<Product> getAllProductsByPriceLow(@RequestParam Integer limit) {
-        return productService.getAllProductsByPriceLow(limit);
+    @PostMapping
+    public ProductDto addNewProduct(@RequestBody ProductDto productDto) {
+        return new ProductDto(productService.addProduct(new Product(productDto)));
     }
 
-    @GetMapping("/products/between")
-    public List<Product> getAllProductsByPriceBetween(@RequestParam Integer min, @RequestParam Integer max) {
-        return productService.getAllProductsByPriceBetween(min, max);
-    }
-
-    @GetMapping("/products/high_price")
-    public List<Product> getAllProductsByPriceHigh(@RequestParam Integer limit) {
-        return productService.getAllProductsByPriceHigh(limit);
-    }
-
-    @PostMapping("/products")
-    public Product addNewProduct(@RequestBody Product product) {
-        return productService.addProduct(product);
-    }
-
-    @GetMapping("/products/delete/{id}")
+    @DeleteMapping("{id}")
     public void deleteProductById(@PathVariable Long id) {
         productService.deleteProductById(id);
+    }
+
+    @PutMapping
+    public void changeProduct(@RequestBody ProductDto productDto) {
+        productService.updateProduct(new Product(productDto));
     }
 }
