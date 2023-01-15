@@ -1,5 +1,7 @@
 package ru.home.aglar.market.entities;
 
+import ru.home.aglar.market.dto.ProductDto;
+
 import javax.persistence.*;
 
 @Entity
@@ -17,6 +19,12 @@ public class Product {
     private Integer price;
 
     public Product() {
+    }
+
+    public Product(ProductDto productDto) {
+        this.id = productDto.getId();
+        this.title = productDto.getTitle();
+        this.price = productDto.getPrice();
     }
 
     public Long getId() {
