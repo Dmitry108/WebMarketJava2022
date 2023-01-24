@@ -12,9 +12,10 @@
     <div class="container" ng-controller="MarketController">
         <h3>Список продуктов</h3>
         <h3>Фильтрация по цене</h3>
-        <form novalidate ng-submit="getProductsByPrice()">
-            <input type="number" class="fore-control" placeholder="max" ng-model="max">
-            <input type="number" placeholder="min" ng-model="min">
+        <form novalidate ng-submit="loadProducts()">
+            <input type="number" class="fore-control" placeholder="page" ng-model="page">
+            <input type="number" class="fore-control" placeholder="min" ng-model="f.min">
+            <input type="number" class="fore-control" placeholder="max" ng-model="f.max">
             <button type="submit" class="btn btn-primary">Применить</button>
         </form>
         <table class="table table-hover" cellpadding="0" cellspacing="0">

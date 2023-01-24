@@ -16,7 +16,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ProductDto getProductById(@PathVariable Long id) {
         return new ProductDto(productService.getProductById(id).get());
     }
@@ -26,16 +26,15 @@ public class ProductController {
                                            @RequestParam(name = "min_price", required = false) Integer minPrice,
                                            @RequestParam(name = "max_price", required = false) Integer maxPrice) {
         if (page < 1) page = 1;
-        return new PageImpl<>(productService.getAllProducts(page, minPrice, maxPrice)
-                .stream().map(ProductDto::new).toList());
+        return productService.getAllProducts(page, minPrice, maxPrice).map(ProductDto::new);
     }
 
     @PostMapping
-    public ProductDto addNewProduct(@RequestBody ProductDto productDto) {
-        return new ProductDto(productService.addProduct(new Product(productDto)));
+    public Product addNewProduct(@RequestBody Product product) {
+        return productService.addProduct(product);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public void deleteProductById(@PathVariable Long id) {
         productService.deleteProductById(id);
     }
