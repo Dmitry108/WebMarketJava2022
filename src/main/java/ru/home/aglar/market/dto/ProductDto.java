@@ -7,6 +7,9 @@ public class ProductDto {
     private String title;
     private Integer price;
 
+    public ProductDto() {
+    }
+
     public ProductDto(Product product) {
         this.id = product.getId();
         this.title = product.getTitle();

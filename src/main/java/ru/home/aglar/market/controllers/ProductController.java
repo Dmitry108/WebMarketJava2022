@@ -1,24 +1,28 @@
 package ru.home.aglar.market.controllers;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.web.bind.annotation.*;
 import ru.home.aglar.market.dto.ProductDto;
 import ru.home.aglar.market.entities.Product;
+import ru.home.aglar.market.exceptions.ResourceNotFoundException;
 import ru.home.aglar.market.services.ProductService;
+import ru.home.aglar.market.validations.ProductValidator;
 
 @RestController
 @RequestMapping("/api/v1/products")
 public class ProductController {
     private ProductService productService;
+    private ProductValidator productValidator;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, ProductValidator productValidator) {
         this.productService = productService;
+        this.productValidator = productValidator;
     }
 
     @GetMapping("/{id}")
     public ProductDto getProductById(@PathVariable Long id) {
-        return new ProductDto(productService.getProductById(id).get());
+        return new ProductDto(productService.getProductById(id).orElseThrow(() ->
+                new ResourceNotFoundException(String.format("Product with id = %d does not found", id))));
     }
 
     @GetMapping
@@ -30,8 +34,9 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product addNewProduct(@RequestBody Product product) {
-        return productService.addProduct(product);
+    public Product addNewProduct(@RequestBody ProductDto productDto) {
+        productValidator.validate(productDto);
+        return productService.addProduct(new Product(productDto));
     }
 
     @DeleteMapping("/{id}")
@@ -41,6 +46,7 @@ public class ProductController {
 
     @PutMapping
     public void changeProduct(@RequestBody ProductDto productDto) {
+        productValidator.validate(productDto);
         productService.updateProduct(new Product(productDto));
     }
 }
