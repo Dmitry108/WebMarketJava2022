@@ -1,7 +1,5 @@
 package ru.home.aglar.market.dto;
 
-import ru.home.aglar.market.entities.Product;
-
 public class ProductDto {
     private Long id;
     private String title;
@@ -10,10 +8,10 @@ public class ProductDto {
     public ProductDto() {
     }
 
-    public ProductDto(Product product) {
-        this.id = product.getId();
-        this.title = product.getTitle();
-        this.price = product.getPrice();
+    public ProductDto(Long id, String title, Integer price) {
+        this.id = id;
+        this.title = title;
+        this.price = price;
     }
 
     public Long getId() {

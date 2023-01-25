@@ -2,6 +2,7 @@ package ru.home.aglar.market.controllers;
 
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import ru.home.aglar.market.converters.ProductConverter;
 import ru.home.aglar.market.dto.ProductDto;
 import ru.home.aglar.market.entities.Product;
 import ru.home.aglar.market.exceptions.ResourceNotFoundException;
@@ -13,15 +14,17 @@ import ru.home.aglar.market.validations.ProductValidator;
 public class ProductController {
     private ProductService productService;
     private ProductValidator productValidator;
+    private ProductConverter productConverter;
 
-    public ProductController(ProductService productService, ProductValidator productValidator) {
+    public ProductController(ProductService productService, ProductValidator productValidator, ProductConverter productConverter) {
         this.productService = productService;
         this.productValidator = productValidator;
+        this.productConverter = productConverter;
     }
 
     @GetMapping("/{id}")
     public ProductDto getProductById(@PathVariable Long id) {
-        return new ProductDto(productService.getProductById(id).orElseThrow(() ->
+        return productConverter.convertToDto(productService.getProductById(id).orElseThrow(() ->
                 new ResourceNotFoundException(String.format("Product with id = %d does not found", id))));
     }
 
@@ -30,13 +33,13 @@ public class ProductController {
                                            @RequestParam(name = "min_price", required = false) Integer minPrice,
                                            @RequestParam(name = "max_price", required = false) Integer maxPrice) {
         if (page < 1) page = 1;
-        return productService.getAllProducts(page, minPrice, maxPrice).map(ProductDto::new);
+        return productService.getAllProducts(page, minPrice, maxPrice).map(productConverter::convertToDto);
     }
 
     @PostMapping
     public Product addNewProduct(@RequestBody ProductDto productDto) {
         productValidator.validate(productDto);
-        return productService.addProduct(new Product(productDto));
+        return productService.addProduct(productConverter.convertFromDto(productDto));
     }
 
     @DeleteMapping("/{id}")
@@ -45,8 +48,8 @@ public class ProductController {
     }
 
     @PutMapping
-    public void changeProduct(@RequestBody ProductDto productDto) {
+    public void updateProduct(@RequestBody ProductDto productDto) {
         productValidator.validate(productDto);
-        productService.updateProduct(new Product(productDto));
+        productService.updateProduct(productConverter.convertFromDto(productDto));
     }
 }

@@ -21,10 +21,10 @@ public class Product {
     public Product() {
     }
 
-    public Product(ProductDto productDto) {
-        this.id = productDto.getId();
-        this.title = productDto.getTitle();
-        this.price = productDto.getPrice();
+    public Product(Long id, String title, Integer price) {
+        this.id = id;
+        this.title = title;
+        this.price = price;
     }
 
     public Long getId() {
