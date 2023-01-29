@@ -23,6 +23,7 @@
                 <td>ID</td>
                 <td>Продукт</td>
                 <td>Цена</td>
+                <td>Корзина</td>
                 <td>Удалить</td>
             </tr>
             <tbody>
@@ -31,11 +32,37 @@
                     <td>{{product.title}}</td>
                     <td>{{product.price}}</td>
                     <td>
+                        <button class="btn btn-primary" ng-click="addToCart(product.id)">Добавить</button>
+                    </td>
+                    <td>
                         <button class="btn btn-danger" ng-click="deleteProduct(product.id)">Удалить</button>
                     </td>
                 </tr>
                 </tbody>
             </table>
+            <h3>Корзина</h3>
+            <table class="table table-hover" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td>Продукт</td>
+                    <td>Количество</td>
+                    <td>Общая цена</td>
+                    <td>Удалить</td>
+                </tr>
+            <tbody>
+            <tr ng-repeat="record in cart">
+                <td>{{record.product.title}}</td>
+                <td>
+                    <button class="btn btn-primary" ng-click="deleteRecord(record.product.id, 1)">-</button>
+                    {{record.count}}
+                    <button class="btn btn-primary" ng-click="addToCart(record.product.id)">+</button>
+                </td>
+                <td>{{record.product.price * record.count}}</td>
+                <td>
+                    <button class="btn btn-danger" ng-click="deleteRecord(record.product.id, null)">Удалить</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
             <h3>Добавить товар</h3>
             <form novalidate ng-submit="addProduct()">
                 <input type="text" class="fore-control" placeholder="title" ng-model="newProduct.title"><br>

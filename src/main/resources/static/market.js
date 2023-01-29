@@ -1,10 +1,9 @@
 angular.module('market', []).controller('MarketController', function ($scope, $http) {
-    const contextPath = 'http://localhost:8089/market/api/v1/products'
+    const contextPath = 'http://localhost:8089/market/api/v1'
 
     $scope.loadProducts = function() {
-        console.log("path: " + contextPath);
         $http({
-            url: contextPath,
+            url: contextPath + "/products",
             method: 'GET',
             params: {
                 p: $scope.page,
@@ -17,19 +16,46 @@ angular.module('market', []).controller('MarketController', function ($scope, $h
     };
 
     $scope.deleteProduct = function(id) {
-        $http.delete(contextPath + "/" + id)
+        $http.delete(contextPath + "/products/" + id)
             .then(function() {
                 $scope.loadProducts()
             });
     };
 
-   $scope.addProduct = function() {
-        $http.post(contextPath, $scope.newProduct)
+    $scope.addProduct = function() {
+        $http.post(contextPath + "/products", $scope.newProduct)
             .then(function(response) {
-            console.log("удалось");
                 $scope.loadProducts();
             });
-   };
+    };
 
-   $scope.loadProducts();
+    $scope.loadCart = function() {
+        $http.get(contextPath + "/carts")
+            .then(function(response) {
+                $scope.cart = response.data;
+            });
+    };
+
+    $scope.addToCart = function(id) {
+        $http.get(contextPath + "/carts/" + id)
+            .then(function(response) {
+                $scope.loadCart();
+            });
+    };
+
+    $scope.deleteRecord = function(id, delta) {
+        $http({
+            method: 'DELETE',
+            url: contextPath + "/carts/" + id,
+            params: {
+                d: delta
+            }
+        }).then(function() {
+            $scope.loadCart();
+        });
+    };
+
+    $scope.loadProducts();
+    $scope.loadCart();
+
 });
