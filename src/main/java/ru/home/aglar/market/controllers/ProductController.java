@@ -1,5 +1,6 @@
 package ru.home.aglar.market.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import ru.home.aglar.market.converters.ProductConverter;
@@ -11,16 +12,11 @@ import ru.home.aglar.market.validations.ProductValidator;
 
 @RestController
 @RequestMapping("/api/v1/products")
+@RequiredArgsConstructor
 public class ProductController {
-    private ProductService productService;
-    private ProductValidator productValidator;
-    private ProductConverter productConverter;
-
-    public ProductController(ProductService productService, ProductValidator productValidator, ProductConverter productConverter) {
-        this.productService = productService;
-        this.productValidator = productValidator;
-        this.productConverter = productConverter;
-    }
+    private final ProductService productService;
+    private final ProductValidator productValidator;
+    private final ProductConverter productConverter;
 
     @GetMapping("/{id}")
     public ProductDto getProductById(@PathVariable Long id) {

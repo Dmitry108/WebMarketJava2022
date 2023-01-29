@@ -1,5 +1,6 @@
 package ru.home.aglar.market.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.home.aglar.market.dto.CartRecordDto;
 import ru.home.aglar.market.entities.Product;
@@ -11,14 +12,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/carts")
+@RequiredArgsConstructor
 public class CartController {
-    private CartService cartService;
-    private ProductService productService;
-
-    public CartController(CartService cartService, ProductService productService) {
-        this.cartService = cartService;
-        this.productService = productService;
-    }
+    private final CartService cartService;
+    private final ProductService productService;
 
     @GetMapping
     public List<CartRecordDto> getCartRecords() {
