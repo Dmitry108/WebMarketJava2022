@@ -1,73 +1,61 @@
 angular.module('market', []).controller('MarketController', function ($scope, $http) {
-    const contextPath = 'http://localhost:8089/market'
+    const contextPath = 'http://localhost:8089/market/api/v1'
 
     $scope.loadProducts = function() {
-        $http.get(contextPath + '/products')
-            .then(function (response) {
-                $scope.products = response.data;
-            });
+        $http({
+            url: contextPath + "/products",
+            method: 'GET',
+            params: {
+                p: $scope.page,
+                min_price: $scope.f ? $scope.f.min : null,
+                max_price: $scope.f ? $scope.f.max : null
+            }
+        }).then(function(response) {
+            $scope.products = response.data.content;
+        });
     };
 
     $scope.deleteProduct = function(id) {
-        $http.get(contextPath + '/products/delete/' + id)
+        $http.delete(contextPath + "/products/" + id)
             .then(function() {
                 $scope.loadProducts()
             });
     };
 
-   $scope.addProduct = function() {
-        $http.post(contextPath + '/products', $scope.newProduct)
+    $scope.addProduct = function() {
+        $http.post(contextPath + "/products", $scope.newProduct)
             .then(function(response) {
                 $scope.loadProducts();
             });
-   };
+    };
 
-   $scope.getProductsByLowPrice = function() {
-       $http({
-            url: contextPath + '/products/low_price',
-            method: 'get',
-            params: {
-                limit: $scope.max
-            }
-       }).then(function(response) {
-            $scope.products = response.data;
-       });
-   };
+    $scope.loadCart = function() {
+        $http.get(contextPath + "/carts")
+            .then(function(response) {
+                $scope.cart = response.data;
+            });
+    };
 
-   $scope.getProductsByHighPrice = function() {
+    $scope.addToCart = function(id) {
+        $http.get(contextPath + "/carts/" + id)
+            .then(function(response) {
+                $scope.loadCart();
+            });
+    };
+
+    $scope.deleteRecord = function(id, delta) {
         $http({
-            url: contextPath + '/products/high_price',
-            method: 'get',
+            method: 'DELETE',
+            url: contextPath + "/carts/" + id,
             params: {
-                limit: $scope.min
+                d: delta
             }
-        }).then(function(response) {
-            $scope.products = response.data;
+        }).then(function() {
+            $scope.loadCart();
         });
-   };
+    };
 
-   $scope.getProductsByPriceBetween = function() {
-        $http({
-            url: contextPath + '/products/between',
-            method: 'get',
-            params: {
-                min: $scope.min,
-                max: $scope.max
-            }
-        }).then(function(response) {
-            $scope.products = response.data;
-        });
-   };
+    $scope.loadProducts();
+    $scope.loadCart();
 
-   $scope.getProductsByPrice = function() {
-        if ($scope.max != null && $scope.min != null) {
-            $scope.getProductsByPriceBetween();
-        } else if ($scope.max != null) {
-            $scope.getProductsByLowPrice()
-        } else if ($scope.min != null) {
-            $scope.getProductsByHighPrice();
-        }
-   };
-
-   $scope.loadProducts();
 });
