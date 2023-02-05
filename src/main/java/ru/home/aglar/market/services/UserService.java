@@ -13,6 +13,7 @@ import ru.home.aglar.market.entities.User;
 import ru.home.aglar.market.repositories.UserRepository;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -33,10 +34,13 @@ public class UserService implements UserDetailsService {
                 String.format("User with username = %s not found", username)));
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
-
     }
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+    }
+
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
     }
 }
