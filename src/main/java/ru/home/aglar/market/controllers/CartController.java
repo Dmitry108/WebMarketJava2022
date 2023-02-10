@@ -2,13 +2,9 @@ package ru.home.aglar.market.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.home.aglar.market.dto.CartRecordDto;
-import ru.home.aglar.market.entities.Product;
-import ru.home.aglar.market.exceptions.ResourceNotFoundException;
+import ru.home.aglar.market.dto.Cart;
 import ru.home.aglar.market.services.CartService;
 import ru.home.aglar.market.services.ProductService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/carts")
@@ -18,18 +14,27 @@ public class CartController {
     private final ProductService productService;
 
     @GetMapping
-    public List<CartRecordDto> getCartRecords() {
-        return cartService.getCartRecords();
+    public Cart getCart() {
+        return cartService.getCart();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/add/{id}")
     public void addProductToCart(@PathVariable Long id) {
-        Product product = productService.getProductById(id).orElseThrow(() -> new ResourceNotFoundException(null));
-        cartService.addProductToCart(product);
+        cartService.addProductById(id);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteProductFromCart(@PathVariable Long id, @RequestParam(name = "d", required = false) Integer delta) {
-        cartService.deleteProductFromCart(id, delta);
+    @GetMapping("/clear")
+    public void clear() {
+        cartService.clear();
+    }
+
+    @GetMapping("/delete/{id}")
+    public void deleteProductFromCart(@PathVariable Long id) {
+        cartService.deleteProductFromCart(id);
+    }
+
+    @GetMapping("/decrease/{id}")
+    public void decreaseProductInCart(@PathVariable Long id) {
+        cartService.decreaseProductInCart(id);
     }
 }

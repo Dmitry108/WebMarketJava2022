@@ -33,29 +33,39 @@ angular.module('market', []).controller('MarketController', function ($scope, $h
         $http.get(contextPath + "/carts")
             .then(function(response) {
                 $scope.cart = response.data;
+                console.log(response.data);
+                console.log($scope.cart.totalPrice);
             });
     };
 
     $scope.addToCart = function(id) {
-        $http.get(contextPath + "/carts/" + id)
+        $http.get(contextPath + "/carts/add/" + id)
             .then(function(response) {
                 $scope.loadCart();
             });
     };
 
-    $scope.deleteRecord = function(id, delta) {
-        $http({
-            method: 'DELETE',
-            url: contextPath + "/carts/" + id,
-            params: {
-                d: delta
-            }
-        }).then(function() {
-            $scope.loadCart();
-        });
+    $scope.decreaseProductInCart = function(id) {
+        $http.get(contextPath + "/carts/decrease/" + id)
+            .then(function() {
+                $scope.loadCart();
+            });
+    };
+
+    $scope.deleteRecord = function(id) {
+        $http.get(contextPath + "/carts/delete/" + id)
+            .then(function() {
+                $scope.loadCart();
+            });
+    };
+
+    $scope.clearCart = function() {
+        $http.get(contextPath + "/carts/clear")
+            .then(function(response) {
+                $scope.loadCart();
+            });
     };
 
     $scope.loadProducts();
     $scope.loadCart();
-
 });

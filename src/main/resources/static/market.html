@@ -49,20 +49,26 @@
                     <td>Удалить</td>
                 </tr>
             <tbody>
-            <tr ng-repeat="record in cart">
-                <td>{{record.product.title}}</td>
+            <tr ng-repeat="record in cart.records">
+                <td>{{record.title}}</td>
                 <td>
-                    <button class="btn btn-primary" ng-click="deleteRecord(record.product.id, 1)">-</button>
-                    {{record.count}}
-                    <button class="btn btn-primary" ng-click="addToCart(record.product.id)">+</button>
+                    <button class="btn btn-primary" ng-click="decreaseProductInCart(record.productId)">-</button>
+                    {{record.quantity}}
+                    <button class="btn btn-primary" ng-click="addToCart(record.productId)">+</button>
                 </td>
-                <td>{{record.product.price * record.count}}</td>
+                <td>{{record.totalPrice}}</td>
                 <td>
-                    <button class="btn btn-danger" ng-click="deleteRecord(record.product.id, null)">Удалить</button>
+                    <button class="btn btn-danger" ng-click="deleteRecord(record.productId)">Удалить</button>
                 </td>
+            </tr>
+            <tr>
+                <td>Итого:</td>
+                <td></td>
+                <td>{{cart.totalPrice}}</td>
             </tr>
             </tbody>
         </table>
+        <button class="btn btn-primary" ng-click="clearCart()">Очистить</button>
             <h3>Добавить товар</h3>
             <form novalidate ng-submit="addProduct()">
                 <input type="text" class="fore-control" placeholder="title" ng-model="newProduct.title"><br>

@@ -1,41 +1,28 @@
 package ru.home.aglar.market.dto;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.home.aglar.market.entities.Product;
 
+@Data
+@NoArgsConstructor
 public class CartRecordDto {
-    private Product product;
-    private int count;
-
-    public Integer getTotalPrice() {
-        return product.getPrice() * count;
-    }
+    private Long productId;
+    private String title;
+    private Integer price;
+    private Integer quantity;
+    private Integer totalPrice;
 
     public CartRecordDto(Product product) {
-        this.product = product;
-        this.count = 1;
+        this.productId = product.getId();
+        this.title = product.getTitle();
+        this.price = product.getPrice();
+        this.quantity = 1;
+        this.totalPrice = this.price;
     }
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void increaseCount() {
-        ++count;
-    }
-
-    public void decreaseCount() {
-        --count;
-    }
-
-    public void changeCount(int delta) {
-        count += delta;
+    public void changeQuantity(int delta) {
+        quantity += delta;
+        totalPrice = quantity * price;
     }
 }
