@@ -101,7 +101,17 @@ angular.module('market', ['ngStorage']).controller('MarketController',
         delete $localStorage.marketUser;
     };
 
+    $scope.showProfile = function() {
+        $http.get(contextPath + "/profiles")
+            .then(function successCallback(response) {
+                alert("Username: " + response.data.username +
+                    "\nEmail: " + response.data.email);
+                }, function errorCallback(response) {
+                    alert("UNAUTHORIZED");
+                }
+            );
+    };
+
     $scope.loadProducts();
     $scope.loadCart();
-
 });
