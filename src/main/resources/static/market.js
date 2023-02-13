@@ -33,8 +33,8 @@ angular.module('market', []).controller('MarketController', function ($scope, $h
         $http.get(contextPath + "/carts")
             .then(function(response) {
                 $scope.cart = response.data;
-                console.log(response.data);
-                console.log($scope.cart.totalPrice);
+//                console.log(response.data);
+//                console.log($scope.cart.totalPrice);
             });
     };
 
@@ -63,6 +63,15 @@ angular.module('market', []).controller('MarketController', function ($scope, $h
         $http.get(contextPath + "/carts/clear")
             .then(function(response) {
                 $scope.loadCart();
+            });
+    };
+
+    $scope.createOrder = function(id) {
+        console.log($scope.cart);
+        $scope.orderRequest = {userId: id, cart: $scope.cart};
+        $http.post(contextPath + "/orders", $scope.orderRequest)
+            .then(function() {
+                $scope.clearCart();
             });
     };
 

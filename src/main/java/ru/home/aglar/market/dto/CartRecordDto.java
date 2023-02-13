@@ -1,11 +1,13 @@
 package ru.home.aglar.market.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.home.aglar.market.entities.Product;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class CartRecordDto {
     private Long productId;
     private String title;
