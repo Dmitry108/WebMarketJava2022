@@ -3,7 +3,9 @@ package ru.home.aglar.market.configs;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -15,31 +17,28 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Component
+@RequiredArgsConstructor
 public class JwtTokenUtil {
-    @Value("${jwt.secret}")
-    private String secret;
-
-    @Value("${jwt.lifetime}")
-    private Integer jwtTimeLife;
+    private final JwtProperties properties;
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
         claims.put("roles", roles);
         Date issuedDate = new Date();
-        Date expiredDate = new Date(issuedDate.getTime() + jwtTimeLife);
+        Date expiredDate = new Date(issuedDate.getTime() + properties.getLifetime().toMillis());
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(issuedDate)
                 .setExpiration(expiredDate)
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .signWith(SignatureAlgorithm.HS256, properties.getSecret())
                 .compact();
     }
 
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser()
-                .setSigningKey(secret)
+                .setSigningKey(properties.getSecret())
                 .parseClaimsJws(token)
                 .getBody();
     }
