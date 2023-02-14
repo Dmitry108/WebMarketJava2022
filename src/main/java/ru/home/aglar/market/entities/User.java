@@ -12,9 +12,9 @@ import java.util.Collection;
 
 @Entity
 @Table(schema = "market", name = "users")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

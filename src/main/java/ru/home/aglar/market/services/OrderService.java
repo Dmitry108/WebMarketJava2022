@@ -27,12 +27,12 @@ public class OrderService {
     private final OrderItemRepository orderItemRepository;
 
 
-    public void addNewOrder(Long userId, Cart cart) {
+    public void addNewOrder(String username, Cart cart) {
         List<CartRecordDto> itemDtoList = cart.getRecords();
         LocalDateTime dateTime = LocalDateTime.now();
         Order order = new Order(null,
-                userService.findUserById(userId).orElseThrow(() ->
-                        new ResourceNotFoundException(String.format("User with id = %d not found", userId))),
+                userService.findUserByUsername(username).orElseThrow(() ->
+                        new ResourceNotFoundException(String.format("User with username %s not found", username))),
                 cart.getTotalPrice(), dateTime, dateTime);
         List<OrderItem> orderItems = itemDtoList.stream().map(itemDto -> orderItemConverter.convertFromDto(itemDto, order,
                 productService.getProductById(itemDto.getProductId()).orElseThrow(() ->

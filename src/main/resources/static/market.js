@@ -1,5 +1,11 @@
-angular.module('market', []).controller('MarketController', function ($scope, $http) {
+angular.module('market', ['ngStorage']).controller('MarketController',
+        function ($rootScope, $scope, $localStorage, $http) {
+
     const contextPath = 'http://localhost:8089/market/api/v1'
+
+    if ($localStorage.marketUser) {
+        $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.marketUser.token;
+    }
 
     $scope.loadProducts = function() {
         $http({
@@ -73,6 +79,57 @@ angular.module('market', []).controller('MarketController', function ($scope, $h
             .then(function() {
                 $scope.clearCart();
             });
+    };
+
+    $rootScope.isUserLoggedIn = function() {
+        if ($localStorage.marketUser) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+    $scope.tryToAuth = function() {
+        $http.post(contextPath + "/auth", $scope.user)
+            .then(function successCallback(response) {
+                if (response.data.token) {
+                    $http.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
+                    $localStorage.marketUser = {
+                        username: $scope.user.username,
+                        token: response.data.token
+                    };
+                    $scope.user.username = null;
+                    $scope.user.token = null;
+                }
+            }, function errorCallback(response) {
+
+            });
+    };
+
+    $scope.tryToLogout = function() {
+        $scope.clearUser();
+        if ($scope.user.username) {
+            $scope.user.username = null;
+        }
+        if ($scope.user.password) {
+            $scope.user.password = null;
+        }
+    };
+
+    $scope.clearUser = function() {
+        $http.defaults.headers.common.Authorization = '';
+        delete $localStorage.marketUser;
+    };
+
+    $scope.showProfile = function() {
+        $http.get(contextPath + "/profiles")
+            .then(function successCallback(response) {
+                alert("Username: " + response.data.username +
+                    "\nEmail: " + response.data.email);
+                }, function errorCallback(response) {
+                    alert("UNAUTHORIZED");
+                }
+            );
     };
 
     $scope.loadProducts();

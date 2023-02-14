@@ -6,6 +6,8 @@ import ru.home.aglar.market.dto.OrderRequest;
 import ru.home.aglar.market.dto.OrderResponse;
 import ru.home.aglar.market.services.OrderService;
 
+import java.security.Principal;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/orders")
@@ -14,8 +16,8 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public void doOrder(@RequestBody OrderRequest orderRequest) {
-        orderService.addNewOrder(orderRequest.getUserId(), orderRequest.getCart());
+    public void doOrder(@RequestBody OrderRequest orderRequest, Principal principal) {
+        orderService.addNewOrder(principal.getName(), orderRequest.getCart());
     }
 
     @GetMapping("/{id}")
