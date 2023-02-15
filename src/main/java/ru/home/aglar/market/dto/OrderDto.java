@@ -2,17 +2,18 @@ package ru.home.aglar.market.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-@AllArgsConstructor
 @Data
-public class OrderResponse {
+@NoArgsConstructor
+@AllArgsConstructor
+public class OrderDto {
     private Long id;
-    private UserDto user;
+    private String username;
     private List<CartRecordDto> orderItems;
     private Integer totalPrice;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private String address;
+    private String phone;
 }

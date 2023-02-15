@@ -3,13 +3,14 @@ package ru.home.aglar.market.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(schema = "market", name = "order_items")
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
 public class OrderItem {
     @Id
@@ -21,7 +22,7 @@ public class OrderItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
@@ -33,4 +34,12 @@ public class OrderItem {
 
     @Column(name = "price")
     private Integer price;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }

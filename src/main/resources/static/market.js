@@ -74,12 +74,20 @@ angular.module('market', ['ngStorage']).controller('MarketController',
 
     $scope.createOrder = function(id) {
         console.log($scope.cart);
-        $scope.orderRequest = {userId: id, cart: $scope.cart};
-        $http.post(contextPath + "/orders", $scope.orderRequest)
+        $http.post(contextPath + "/orders", $scope.orderDetails)
             .then(function() {
                 $scope.clearCart();
+                $scope.loadOrders();
+                $scope.orderDetails = null;
             });
     };
+
+    $scope.loadOrders = function() {
+            $http.get(contextPath + "/orders")
+                .then(function(response) {
+                    $scope.orders = response.data;
+                });
+        };
 
     $rootScope.isUserLoggedIn = function() {
         if ($localStorage.marketUser) {
@@ -134,4 +142,5 @@ angular.module('market', ['ngStorage']).controller('MarketController',
 
     $scope.loadProducts();
     $scope.loadCart();
+    $scope.loadOrders();
 });
