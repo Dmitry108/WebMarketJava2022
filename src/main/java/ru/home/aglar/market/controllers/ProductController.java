@@ -3,6 +3,7 @@ package ru.home.aglar.market.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import ru.home.aglar.market.aspects.Timer;
 import ru.home.aglar.market.converters.ProductConverter;
 import ru.home.aglar.market.dto.ProductDto;
 import ru.home.aglar.market.entities.Product;
@@ -24,6 +25,7 @@ public class ProductController {
                 new ResourceNotFoundException(String.format("Product with id = %d does not found", id))));
     }
 
+    @Timer
     @GetMapping
     public Page<ProductDto> getAllProducts(@RequestParam(name = "p", defaultValue = "1") Integer page,
                                            @RequestParam(name = "min_price", required = false) Integer minPrice,

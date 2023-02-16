@@ -4,15 +4,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.home.aglar.market.aspects.Timer;
 import ru.home.aglar.market.converters.OrderConverter;
 import ru.home.aglar.market.dto.OrderDetailsDto;
 import ru.home.aglar.market.dto.OrderDto;
 import ru.home.aglar.market.services.OrderService;
-import ru.home.aglar.market.services.UserService;
 
 import java.security.Principal;
 import java.util.List;
 
+@Timer
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -20,7 +21,6 @@ import java.util.List;
 public class OrderController {
     private final OrderService orderService;
     private final OrderConverter orderConverter;
-    private final UserService userService;
 
     @PostMapping
     //вернется в ответе 201

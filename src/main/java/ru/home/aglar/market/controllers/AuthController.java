@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.home.aglar.market.aspects.Timer;
 import ru.home.aglar.market.configs.JwtTokenUtil;
 import ru.home.aglar.market.dto.JwtRequest;
 import ru.home.aglar.market.dto.JwtResponse;
@@ -26,6 +27,7 @@ public class AuthController {
     private final UserService userService;
     private final JwtTokenUtil jwtTokenUtil;
 
+    @Timer
     @PostMapping
     public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest) {
         try {
