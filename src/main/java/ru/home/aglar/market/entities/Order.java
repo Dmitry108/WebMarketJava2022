@@ -1,6 +1,5 @@
 package ru.home.aglar.market.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -8,12 +7,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(schema = "market", name = "orders")
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
+@NoArgsConstructor
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,14 +23,19 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
+    //cascade.persist позволяет сохранить orderitems в бд при сохранении orders каскадно
+    //remove - удалить их
+    @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<OrderItem> orderItems;
+
     @Column(name = "total_price")
     private Integer totalPrice;
 
-//    @Column(name = "address")
-//    private String address;
-//
-//    @Column(name = "phone")
-//    private String phone;
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "phone")
+    private String phone;
 
     @CreationTimestamp
     @Column(name = "created_at")

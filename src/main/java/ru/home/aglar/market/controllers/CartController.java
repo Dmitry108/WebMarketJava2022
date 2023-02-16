@@ -4,18 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.home.aglar.market.dto.Cart;
 import ru.home.aglar.market.services.CartService;
-import ru.home.aglar.market.services.ProductService;
 
 @RestController
 @RequestMapping("/api/v1/carts")
 @RequiredArgsConstructor
 public class CartController {
     private final CartService cartService;
-    private final ProductService productService;
 
     @GetMapping
     public Cart getCart() {
-        return cartService.getCart();
+        return cartService.getCurrentCart();
     }
 
     @GetMapping("/add/{id}")

@@ -1,52 +1,58 @@
 package ru.home.aglar.market.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.home.aglar.market.converters.OrderItemConverter;
-import ru.home.aglar.market.converters.UserConverter;
+import org.springframework.transaction.annotation.Transactional;
 import ru.home.aglar.market.dto.Cart;
-import ru.home.aglar.market.dto.CartRecordDto;
-import ru.home.aglar.market.dto.OrderResponse;
+import ru.home.aglar.market.dto.OrderDetailsDto;
 import ru.home.aglar.market.entities.Order;
 import ru.home.aglar.market.entities.OrderItem;
+import ru.home.aglar.market.entities.Product;
+import ru.home.aglar.market.entities.User;
 import ru.home.aglar.market.exceptions.ResourceNotFoundException;
-import ru.home.aglar.market.repositories.OrderItemRepository;
 import ru.home.aglar.market.repositories.OrderRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderService {
     private final UserService userService;
     private final ProductService productService;
-    private final OrderItemConverter orderItemConverter;
-    private final UserConverter userConverter;
+    private final CartService cartService;
     private final OrderRepository orderRepository;
-    private final OrderItemRepository orderItemRepository;
 
-
-    public void addNewOrder(String username, Cart cart) {
-        List<CartRecordDto> itemDtoList = cart.getRecords();
-        LocalDateTime dateTime = LocalDateTime.now();
-        Order order = new Order(null,
-                userService.findUserByUsername(username).orElseThrow(() ->
-                        new ResourceNotFoundException(String.format("User with username %s not found", username))),
-                cart.getTotalPrice(), dateTime, dateTime);
-        List<OrderItem> orderItems = itemDtoList.stream().map(itemDto -> orderItemConverter.convertFromDto(itemDto, order,
-                productService.getProductById(itemDto.getProductId()).orElseThrow(() ->
-                        new ResourceNotFoundException("Product not found")))).toList();
+    @Transactional
+    public void addNewOrder(String username, OrderDetailsDto orderDetailsDto) {
+        User user = userService.findUserByUsername(username).orElseThrow(() ->
+                new ResourceNotFoundException(String.format("User with username %s not found", username)));
+        Cart cart = cartService.getCurrentCart();
+        Order order = new Order();
+        order.setUser(user);
+        order.setAddress(orderDetailsDto.getAddress());
+        order.setPhone(orderDetailsDto.getPhone());
+        order.setTotalPrice(cart.getTotalPrice());
+        List<OrderItem> orderItems = cart.getRecords().stream()
+                .map(record -> {
+                    OrderItem item = new OrderItem();
+                    item.setOrder(order);
+                    Product product = productService.getProductById(record.getProductId()).orElseThrow(() ->
+                        new ResourceNotFoundException("Product not found"));
+                    item.setProduct(product);
+                    item.setQuantity(record.getQuantity());
+                    item.setPricePerProduct(record.getPrice());
+                    item.setPrice(record.getTotalPrice());
+                    return item;
+                }).toList();
+        order.setOrderItems(orderItems);
         orderRepository.save(order);
-        orderItemRepository.saveAll(orderItems);
+        cart.clear();
     }
 
-    public OrderResponse getOrderFullInfo(Long id) {
-        Order order = orderRepository.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException(String.format("Order with id = %d not found", id)));
-        List<OrderItem> orderItems = orderItemRepository.findAllByOrderId(id);
-        return new OrderResponse(order.getId(), userConverter.convertToDto(order.getUser()),
-                orderItems.stream().map(orderItemConverter::convertToDto).toList(), order.getTotalPrice(),
-                order.getCreatedAt(), order.getUpdatedAt());
+    public List<Order> findOrdersByUsername(String username) {
+        log.info(username);
+        return orderRepository.findAllByUsername(username);
     }
 }

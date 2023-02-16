@@ -12,30 +12,30 @@ import javax.annotation.PostConstruct;
 @RequiredArgsConstructor
 @Getter
 public class CartService {
-    private Cart cart;
+    private Cart currentCart;
     private final ProductService productService;
 
     @PostConstruct
     private void init() {
-        cart = new Cart();
+        currentCart = new Cart();
     }
 
     public void addProductById(Long id) {
-        if (cart.increaseIfExists(id)) return;
+        if (currentCart.increaseIfExists(id)) return;
         Product product = productService.getProductById(id).orElseThrow(() ->
                 new ResourceNotFoundException(String.format("Product with id = %d doesn't found", id)));
-        cart.addProduct(product);
+        currentCart.addProduct(product);
     }
 
     public void clear() {
-        cart.clear();
+        currentCart.clear();
     }
 
     public void deleteProductFromCart(Long id) {
-        cart.deleteProduct(id);
+        currentCart.deleteProduct(id);
     }
 
     public void decreaseProductInCart(Long id) {
-        cart.decreaseProduct(id);
+        currentCart.decreaseProduct(id);
     }
 }
