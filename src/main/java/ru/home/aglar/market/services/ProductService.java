@@ -9,6 +9,7 @@ import ru.home.aglar.market.entities.Product;
 import ru.home.aglar.market.repositories.ProductRepository;
 import ru.home.aglar.market.specifications.ProductSpecifications;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,6 +30,10 @@ public class ProductService {
             spec = spec.and(ProductSpecifications.priceLesserOrEqualsThen(maxPrice));
         }
         return productRepository.findAll(spec, PageRequest.of(page - 1, 6));
+    }
+
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
     }
 
     public Product addProduct(Product product) {
