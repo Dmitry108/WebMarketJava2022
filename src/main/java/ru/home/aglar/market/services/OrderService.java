@@ -28,7 +28,9 @@ public class OrderService {
     public void addNewOrder(String username, OrderDetailsDto orderDetailsDto) {
         User user = userService.findUserByUsername(username).orElseThrow(() ->
                 new ResourceNotFoundException(String.format("User with username %s not found", username)));
-        Cart cart = cartService.getCurrentCart();
+        String cartKey = cartService.generateCartFromSuffix(username);
+        //:FIXE
+        Cart cart = cartService.getCurrentCart(cartKey);
         Order order = new Order();
         order.setUser(user);
         order.setAddress(orderDetailsDto.getAddress());
@@ -48,7 +50,7 @@ public class OrderService {
                 }).toList();
         order.setOrderItems(orderItems);
         orderRepository.save(order);
-        cart.clear();
+        cartService.clear(cartKey);
     }
 
     public List<Order> findOrdersByUsername(String username) {

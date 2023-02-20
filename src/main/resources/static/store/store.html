@@ -1,7 +1,7 @@
 <div>
   <h3>Список продуктов</h3>
   <h3>Фильтрация по цене</h3>
-  <form novalidate ng-submit="loadProducts()">
+  <form novalidate ng-submit="loadProducts(page)">
     <input type="number" class="fore-control" placeholder="page" ng-model="page">
     <input type="number" class="fore-control" placeholder="min" ng-model="f.min">
     <input type="number" class="fore-control" placeholder="max" ng-model="f.max">
@@ -16,7 +16,7 @@
       <td>Удалить</td>
     </tr>
     <tbody>
-      <tr ng-repeat="product in products">
+      <tr ng-repeat="product in productsPage.content">
         <td>{{product.id}}</td>
         <td>{{product.title}}</td>
         <td>{{product.price}}</td>
@@ -30,21 +30,14 @@
     </tbody>
   </table>
   <br>
-  <!-- <h3>Мои заказы</h3>
-  <table class="table table-hover">
-    <tr>
-      <td>ID</td>
-      <td>Адрес доставки</td>
-      <td>Стоимость</td>
-    </tr>
-    <tbody>
-      <tr ng-repeat="order in orders">
-        <td>{{order.id}}</td>
-        <td>{{order.address}}</td>
-        <td>{{order.totalPrice}}</td>
-      </tr>
-    </tbody>
-  </table> -->
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
+      <li class="page-item" ng-repeat="pageIndex in paginationArray">
+        <button class="page-link" ng-click="loadProducts(pageIndex)">{{pageIndex}}</button>
+      </li>
+    </ul>
+  </nav>
+  <br>
   <h3>Добавить товар</h3>
   <form novalidate ng-submit="addProduct()">
     <input type="text" class="fore-control" placeholder="title" ng-model="newProduct.title"><br>

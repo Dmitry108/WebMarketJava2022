@@ -29,7 +29,25 @@
 
     function run($rootScope, $localStorage, $http) {
         if ($localStorage.marketUser) {
+            try {
+                let jwt = $localStorage.marketUser.token;
+                let payload = JSON.parse(atob(jwt.split('.')[1]));
+                let currentTime = parseInt(new Date().getTime() / 1000);
+                if (currentTime > payload.exp) {
+                    console.log("Token is expired!");
+                    $http.defaults.headers.common.Authorization = '';
+                    delete $localStorage.marketUser;
+                }
+            } catch (e) {}
+        }
+        if ($localStorage.marketUser) {
             $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.marketUser.token;
+        }
+        if (!$localStorage.guestCartKey) {
+            $http.get('http://localhost:8089/market/api/v1/cart/generate')
+            .then(function (response) {
+                $localStorage.guestCartKey = response.data.value;
+            });
         }
     }
 })();
@@ -48,6 +66,8 @@ angular.module('market').controller('IndexController',
                             username: $scope.user.username,
                             token: response.data.token
                         };
+                        //смержить готевую корзину и нормальную
+                        $http.get(contextPath + "/cart/" + $localStorage.guestCartKey + "/merge");
                         $scope.user.username = null;
                         $scope.user.password = null;
                     }

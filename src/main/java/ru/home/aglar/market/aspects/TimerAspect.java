@@ -27,9 +27,15 @@ public class TimerAspect {
         String methodName = proceedingJoinPoint.getSignature().getName();
         Object[] args = proceedingJoinPoint.getArgs();
         long startTime = System.currentTimeMillis();
-        Object result = proceedingJoinPoint.proceed();
-        long deltaTime = System.currentTimeMillis() - startTime;
-        log.info("Время выполнения метода {}#{} с аргументами {}: {} ms", pointClass, methodName, args, deltaTime);
+        Object result = null;
+        try {
+            result = proceedingJoinPoint.proceed();
+        } catch (Throwable t) {
+            t.printStackTrace();
+        } finally {
+            long deltaTime = System.currentTimeMillis() - startTime;
+            log.info("Время выполнения метода {}#{} с аргументами {}: {} ms", pointClass, methodName, args, deltaTime);
+        }
         return result;
     }
 }

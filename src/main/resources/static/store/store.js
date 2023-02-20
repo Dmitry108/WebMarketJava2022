@@ -1,22 +1,30 @@
 angular.module('market').controller('StoreController',
-    function ($scope, $http) {
+    function ($scope, $http, $localStorage) {
 
         const contextPath = 'http://localhost:8089/market/api/v1'
 
-        $scope.loadProducts = function () {
+        $scope.loadProducts = function (page = 1) {
             $http({
                 url: contextPath + "/products",
                 method: 'GET',
                 params: {
-                    p: $scope.page,
+                    p: page,
                     min_price: $scope.f ? $scope.f.min : null,
                     max_price: $scope.f ? $scope.f.max : null
                 }
             }).then(function (response) {
-                console.log(response.data.content)
-                $scope.products = response.data.content;
+                $scope.productsPage = response.data;
+                $scope.paginationArray = $scope.generatePageIndices(1, $scope.productsPage.totalPages);
             });
         };
+
+        $scope.generatePageIndices = function (start, end) {
+            let indices = [];
+            for (let i = start; i <= end; i++) {
+                indices.push(i);
+            }
+            return indices;
+        }
 
         $scope.deleteProduct = function (id) {
             $http.delete(contextPath + "/products/" + id)
@@ -33,7 +41,8 @@ angular.module('market').controller('StoreController',
         };
 
         $scope.addToCart = function (id) {
-            $http.get(contextPath + "/carts/add/" + id)
+            //
+            $http.get(contextPath + "/cart/" + $localStorage.guestCartKey + "/add/" + id)
                 .then(function (response) {
                 });
         };

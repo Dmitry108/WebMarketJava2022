@@ -1,15 +1,19 @@
 package ru.home.aglar.market.dto;
 
+import lombok.Data;
 import lombok.Getter;
 import ru.home.aglar.market.entities.Product;
 
 import java.util.ArrayList;
-import java.util.Collections;
+//import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 @Getter
 public class Cart {
-    private final List<CartRecordDto> records;
+    private List<CartRecordDto> records;
     private Integer totalPrice;
 
     public Cart() {
@@ -39,9 +43,9 @@ public class Cart {
         return true;
     }
 
-    public List<CartRecordDto> getRecords() {
-        return Collections.unmodifiableList(records);
-    }
+//    public List<CartRecordDto> getRecords() {
+//        return Collections.unmodifiableList(records);
+//    }
 
     public void clear() {
         records.clear();
@@ -60,5 +64,16 @@ public class Cart {
                     else r.changeQuantity(-1);
                 });
         recalculate();
+    }
+
+    public void merge(Cart anotherCart) {
+        anotherCart.getRecords().forEach(recordFromAnotherCart -> records.stream()
+                .filter(record -> record.getProductId().equals(recordFromAnotherCart.getProductId()))
+                .findAny()
+                .ifPresentOrElse(
+                        record -> record.changeQuantity(recordFromAnotherCart.getQuantity()),
+                        () -> records.add(recordFromAnotherCart)));
+        recalculate();
+        anotherCart.clear();
     }
 }

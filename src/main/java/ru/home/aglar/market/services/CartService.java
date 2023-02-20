@@ -1,41 +1,75 @@
 package ru.home.aglar.market.services;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import ru.home.aglar.market.dto.Cart;
 import ru.home.aglar.market.entities.Product;
 import ru.home.aglar.market.exceptions.ResourceNotFoundException;
-import javax.annotation.PostConstruct;
+import java.util.UUID;
+import java.util.function.Consumer;
 
 @Service
 @RequiredArgsConstructor
-@Getter
 public class CartService {
-    private Cart currentCart;
     private final ProductService productService;
+    private final RedisTemplate<String, Object> redisTemplate;
 
-    @PostConstruct
-    private void init() {
-        currentCart = new Cart();
+    @Value("${utils.cart.prefix}")
+    private String prefix;
+
+    public String generateCartFromSuffix(String suffix) {
+        return prefix + suffix;
     }
 
-    public void addProductById(Long id) {
-        if (currentCart.increaseIfExists(id)) return;
-        Product product = productService.getProductById(id).orElseThrow(() ->
-                new ResourceNotFoundException(String.format("Product with id = %d doesn't found", id)));
-        currentCart.addProduct(product);
+    public String generateCartUuid() {
+        return UUID.randomUUID().toString();
     }
 
-    public void clear() {
-        currentCart.clear();
+    public Cart getCurrentCart(String cartKey) {
+        if (!redisTemplate.hasKey(cartKey)) {
+            redisTemplate.opsForValue().set(cartKey, new Cart());
+        }
+        return (Cart) redisTemplate.opsForValue().get(cartKey);
     }
 
-    public void deleteProductFromCart(Long id) {
-        currentCart.deleteProduct(id);
+    private void execute(String cartKey, Consumer<Cart> consumer) {
+        Cart cart = getCurrentCart(cartKey);
+        consumer.accept(cart);
+        redisTemplate.opsForValue().set(cartKey, cart);
     }
 
-    public void decreaseProductInCart(Long id) {
-        currentCart.decreaseProduct(id);
+    public void addProductById(String cartKey, Long id) {
+        execute(cartKey, cart -> {
+            if (cart.increaseIfExists(id)) return;
+            Product product = productService.getProductById(id).orElseThrow(() ->
+                    new ResourceNotFoundException(String.format("Product with id = %d doesn't found", id)));
+            cart.addProduct(product);
+        });
+    }
+
+    public void clear(String cartKey) {
+        execute(cartKey, Cart::clear);
+    }
+
+    public void deleteProductFromCart(String cartKey, Long id) {
+        execute(cartKey, cart -> cart.deleteProduct(id));
+    }
+
+    public void decreaseProductInCart(String cartKey, Long id) {
+        execute(cartKey, cart -> cart.decreaseProduct(id));
+    }
+
+    public void updateCart(String cartKey, Cart cart) {
+        redisTemplate.opsForValue().set(cartKey, cart);
+    }
+
+    public void merge(String userCartKey, String guestCartKey) {
+        Cart userCart = getCurrentCart(userCartKey);
+        Cart guestCart = getCurrentCart(guestCartKey);
+        userCart.merge(guestCart);
+        updateCart(userCartKey, userCart);
+        updateCart(guestCartKey, guestCart);
     }
 }

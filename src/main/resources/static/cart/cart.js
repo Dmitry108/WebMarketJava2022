@@ -4,35 +4,35 @@ angular.module('market').controller('CartController',
         const contextPath = 'http://localhost:8089/market/api/v1'
 
         $scope.loadCart = function () {
-            $http.get(contextPath + "/carts")
+            $http.get(contextPath + "/cart/" + $localStorage.guestCartKey)
                 .then(function (response) {
                     $scope.cart = response.data;
                 });
         };
 
         $scope.addToCart = function (id) {
-            $http.get(contextPath + "/carts/add/" + id)
+            $http.get(contextPath + "/cart/" + $localStorage.guestCartKey + "/add/" + id)
                 .then(function (response) {
                     $scope.loadCart();
                 });
         };
 
         $scope.decreaseProductInCart = function (id) {
-            $http.get(contextPath + "/carts/decrease/" + id)
+            $http.get(contextPath + "/cart/" + $localStorage.guestCartKey + "/decrease/" + id)
                 .then(function () {
                     $scope.loadCart();
                 });
         };
 
         $scope.deleteRecord = function (id) {
-            $http.get(contextPath + "/carts/delete/" + id)
+            $http.get(contextPath + "/carts/" + $localStorage.guestCartKey + "/delete/" + id)
                 .then(function () {
                     $scope.loadCart();
                 });
         };
 
         $scope.clearCart = function () {
-            $http.get(contextPath + "/carts/clear")
+            $http.get(contextPath + "/cart/" + $localStorage.guestCartKey + "/clear")
                 .then(function (response) {
                     $scope.loadCart();
                 });
