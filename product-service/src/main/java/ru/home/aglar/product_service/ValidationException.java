@@ -1,3 +1,5 @@
+package ru.home.aglar.product_service;
+
 import lombok.Getter;
 import lombok.Setter;
 

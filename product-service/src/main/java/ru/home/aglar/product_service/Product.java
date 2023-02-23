@@ -1,3 +1,5 @@
+package ru.home.aglar.product_service;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;

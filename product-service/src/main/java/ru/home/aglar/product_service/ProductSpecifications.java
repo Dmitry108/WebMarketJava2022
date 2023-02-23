@@ -1,3 +1,5 @@
+package ru.home.aglar.product_service;
+
 import org.springframework.data.jpa.domain.Specification;
 
 public class ProductSpecifications {

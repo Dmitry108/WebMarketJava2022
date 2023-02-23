@@ -1,3 +1,5 @@
+package ru.home.aglar.product_service;
+
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

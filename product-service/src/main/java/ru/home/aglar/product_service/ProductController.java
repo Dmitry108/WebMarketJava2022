@@ -1,6 +1,10 @@
+package ru.home.aglar.product_service;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -17,11 +21,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public Page<ProductDto> getAllProducts(@RequestParam(name = "p", defaultValue = "1") Integer page,
-                                           @RequestParam(name = "min_price", required = false) Integer minPrice,
-                                           @RequestParam(name = "max_price", required = false) Integer maxPrice) {
-        if (page < 1) page = 1;
-        return productService.getAllProducts(page, minPrice, maxPrice).map(productConverter::convertToDto);
+    public List<ProductDto> getAllProducts() {
+        return productService.getAllProducts().stream().map(productConverter::convertToDto).toList();
     }
 
     @PostMapping

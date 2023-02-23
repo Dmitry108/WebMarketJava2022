@@ -1,3 +1,5 @@
+package ru.home.aglar.front_service;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
