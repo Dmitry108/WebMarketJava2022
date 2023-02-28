@@ -7,7 +7,6 @@ import ru.home.aglar.market.core.dto.ProfileDto;
 @RestController
 @RequestMapping("/api/v1/profiles")
 @RequiredArgsConstructor
-//@CrossOrigin("*")
 public class ProfileController {
 
     @GetMapping

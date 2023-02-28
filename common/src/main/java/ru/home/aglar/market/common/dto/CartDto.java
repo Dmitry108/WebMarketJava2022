@@ -4,9 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class StringResponse {
-    private String value;
+public class CartDto {
+    private List<CartRecordDto> records;
+    private Integer totalPrice;
 }

@@ -1,7 +1,7 @@
 package ru.home.aglar.market.core.converters;
 
 import org.springframework.stereotype.Component;
-import ru.home.aglar.market.core.dto.ProductDto;
+import ru.home.aglar.market.common.dto.ProductDto;
 import ru.home.aglar.market.core.entities.Product;
 
 @Component

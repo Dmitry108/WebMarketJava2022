@@ -1,8 +1,8 @@
 package ru.home.aglar.market.core.converters;
 
+import ru.home.aglar.market.common.dto.CartRecordDto;
 import ru.home.aglar.market.core.entities.OrderItem;
 import org.springframework.stereotype.Component;
-import ru.home.aglar.market.core.dto.CartRecordDto;
 
 @Component
 public class OrderItemConverter {

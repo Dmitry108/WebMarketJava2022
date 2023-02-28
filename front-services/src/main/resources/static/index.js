@@ -44,7 +44,7 @@
             $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.marketUser.token;
         }
         if (!$localStorage.guestCartKey) {
-            $http.get('http://localhost:8888/core/api/v1/cart/generate')
+            $http.get('http://localhost:8888/cart/api/v1/cart/generate')
             .then(function (response) {
                 $localStorage.guestCartKey = response.data.value;
             });
@@ -68,7 +68,7 @@ angular.module('market').controller('IndexController',
                         };
                         console.log($scope.user.username);
                         //смержить готевую корзину и нормальную
-                        $http.get(contextPath + "/core/api/v1/cart/" + $localStorage.guestCartKey + "/merge");
+                        $http.get(contextPath + "/cart/api/v1/cart/" + $localStorage.guestCartKey + "/merge");
                         $scope.user.username = null;
                         $scope.user.password = null;
                     }

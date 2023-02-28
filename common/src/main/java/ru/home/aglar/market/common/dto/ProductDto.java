@@ -1,4 +1,4 @@
-package ru.home.aglar.market.core.dto;
+package ru.home.aglar.market.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

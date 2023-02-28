@@ -1,12 +1,11 @@
-package ru.home.aglar.market.core.services;
+package ru.home.aglar.market.cart.services;
 
 import lombok.RequiredArgsConstructor;
-import ru.home.aglar.market.common.exceptions.ResourceNotFoundException;
+import ru.home.aglar.market.cart.dto.Cart;
+import ru.home.aglar.market.common.dto.ProductDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import ru.home.aglar.market.core.dto.Cart;
-import ru.home.aglar.market.core.entities.Product;
 
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -14,7 +13,6 @@ import java.util.function.Consumer;
 @Service
 @RequiredArgsConstructor
 public class CartService {
-    private final ProductService productService;
     private final RedisTemplate<String, Object> redisTemplate;
 
     @Value("${utils.cart.prefix}")
@@ -33,7 +31,6 @@ public class CartService {
             redisTemplate.opsForValue().set(cartKey, new Cart());
         }
         Cart cart = (Cart) redisTemplate.opsForValue().get(cartKey);
-        System.out.println(cart);
         return cart;
     }
 
@@ -43,13 +40,8 @@ public class CartService {
         redisTemplate.opsForValue().set(cartKey, cart);
     }
 
-    public void addProductById(String cartKey, Long id) {
-        execute(cartKey, cart -> {
-            if (cart.increaseIfExists(id)) return;
-            Product product = productService.getProductById(id).orElseThrow(() ->
-                    new ResourceNotFoundException(String.format("Product with id = %d doesn't found", id)));
-            cart.addProduct(product);
-        });
+    public void addProduct(String cartKey, ProductDto productDto) {
+        execute(cartKey, cart -> cart.addProduct(productDto));
     }
 
     public void clear(String cartKey) {

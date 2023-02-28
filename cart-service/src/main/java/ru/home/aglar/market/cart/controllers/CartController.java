@@ -1,23 +1,27 @@
-package ru.home.aglar.market.core.controllers;
+package ru.home.aglar.market.cart.controllers;
 
 import lombok.RequiredArgsConstructor;
-import ru.home.aglar.market.common.dto.StringResponse;
-import ru.home.aglar.market.core.aspects.Timer;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
-import ru.home.aglar.market.core.dto.Cart;
-import ru.home.aglar.market.core.services.CartService;
+import org.springframework.web.client.RestTemplate;
+import ru.home.aglar.market.cart.converters.CartConverter;
+import ru.home.aglar.market.cart.dto.Cart;
+import ru.home.aglar.market.cart.services.CartService;
+import ru.home.aglar.market.common.dto.CartDto;
+import ru.home.aglar.market.common.dto.ProductDto;
+import ru.home.aglar.market.common.dto.StringResponse;
 
-//@Timer
 @RestController
 @RequestMapping("/api/v1/cart")
 @RequiredArgsConstructor
-//@CrossOrigin("*")
 public class CartController {
+    private final RestTemplate restTemplate;
     private final CartService cartService;
+    private final CartConverter cartConverter;
 
     @GetMapping("/{uuid}")
-    public Cart getCart(@RequestHeader(required = false) String username, @PathVariable String uuid) {
-        return cartService.getCurrentCart(getCartKey(username, uuid));
+    public CartDto getCart(@RequestHeader(required = false) String username, @PathVariable String uuid) {
+        return cartConverter.convertToDto(cartService.getCurrentCart(getCartKey(username, uuid)));
     }
 
     @GetMapping("/generate")
@@ -26,8 +30,11 @@ public class CartController {
     }
 
     @GetMapping("/{uuid}/add/{id}")
-    public void addProductToCart(@RequestHeader(required = false) String username, @PathVariable String uuid, @PathVariable Long id) {
-        cartService.addProductById(getCartKey(username, uuid), id);
+    public void addProductToCart(@RequestHeader(required = false) String username,
+                                 @PathVariable String uuid, @PathVariable Long id) {
+        ProductDto productdto = restTemplate.getForObject("http://localhost:8888/core/api/v1/products/{id}",
+                ProductDto.class, id);
+        cartService.addProduct(getCartKey(username, uuid), productdto);
     }
 
     @GetMapping("{uuid}/clear")

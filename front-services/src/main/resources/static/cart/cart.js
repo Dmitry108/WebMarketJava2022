@@ -1,7 +1,7 @@
 angular.module('market').controller('CartController',
     function ($rootScope, $scope, $localStorage, $http) {
 
-        const contextPath = 'http://localhost:8888/core/api/v1'
+        const contextPath = 'http://localhost:8888/cart/api/v1'
 
         $scope.loadCart = function () {
             $http.get(contextPath + "/cart/" + $localStorage.guestCartKey)
@@ -39,7 +39,7 @@ angular.module('market').controller('CartController',
         };
 
         $scope.createOrder = function () {
-            $http.post(contextPath + "/orders", $scope.orderDetails)
+            $http.post("http://localhost:8888/core/api/v1/orders", $scope.orderDetails)
                 .then(function () {
                     $scope.clearCart();
                     $scope.orderDetails = null;

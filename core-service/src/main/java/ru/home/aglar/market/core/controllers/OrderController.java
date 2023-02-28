@@ -18,13 +18,11 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/orders")
-//@CrossOrigin("*")
 public class OrderController {
     private final OrderService orderService;
     private final OrderConverter orderConverter;
 
     @PostMapping
-    //вернется в ответе 201
     @ResponseStatus(HttpStatus.CREATED)
     public void doOrder(@RequestHeader String username, @RequestBody OrderDetailsDto orderDetailsDto) {
         orderService.addNewOrder(username, orderDetailsDto);

@@ -7,14 +7,13 @@ import ru.home.aglar.market.core.converters.ProductConverter;
 import ru.home.aglar.market.core.validations.ProductValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-import ru.home.aglar.market.core.dto.ProductDto;
+import ru.home.aglar.market.common.dto.ProductDto;
 import ru.home.aglar.market.core.entities.Product;
 import ru.home.aglar.market.core.services.ProductService;
 
 @RestController
 @RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
-//@CrossOrigin("*")
 public class ProductController {
     private final ProductService productService;
     private final ProductValidator productValidator;

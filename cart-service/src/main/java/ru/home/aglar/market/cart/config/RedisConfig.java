@@ -1,4 +1,4 @@
-package ru.home.aglar.market.core.configs;
+package ru.home.aglar.market.cart.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

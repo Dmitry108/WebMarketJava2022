@@ -1,7 +1,7 @@
 package ru.home.aglar.market.core.validations;
 
 import org.springframework.stereotype.Component;
-import ru.home.aglar.market.core.dto.ProductDto;
+import ru.home.aglar.market.common.dto.ProductDto;
 import ru.home.aglar.market.core.exceptions.ValidationException;
 
 import java.util.ArrayList;

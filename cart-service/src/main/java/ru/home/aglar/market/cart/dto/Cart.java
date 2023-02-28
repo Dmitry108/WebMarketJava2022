@@ -1,13 +1,16 @@
-package ru.home.aglar.market.core.dto;
+package ru.home.aglar.market.cart.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
-import ru.home.aglar.market.core.entities.Product;
+import ru.home.aglar.market.common.dto.CartRecordDto;
+import ru.home.aglar.market.common.dto.ProductDto;
 
 import java.util.ArrayList;
-//import java.util.Collections;
 import java.util.List;
 
-@Getter
+@Data
+@AllArgsConstructor
 public class Cart {
     private List<CartRecordDto> records;
     private Integer totalPrice;
@@ -21,12 +24,14 @@ public class Cart {
         records.forEach(record -> totalPrice += record.getTotalPrice());
     }
 
-    public void addProduct(Product product) {
+    public void addProduct(ProductDto productDto) {
         records.stream()
-                .filter(record -> record.getProductId().equals(product.getId()))
+                .filter(record -> record.getProductId().equals(productDto.getId()))
                 .findAny()
                 .ifPresentOrElse(record -> record.changeQuantity(1),
-                        () -> records.add(new CartRecordDto(product)));
+                        () -> records.add(new CartRecordDto(
+                                productDto.getId(), productDto.getTitle(),
+                                productDto.getPrice(), 1, productDto.getPrice())));
         recalculate();
     }
 
@@ -38,10 +43,6 @@ public class Cart {
         recalculate();
         return true;
     }
-
-//    public List<CartRecordDto> getRecords() {
-//        return Collections.unmodifiableList(records);
-//    }
 
     public void clear() {
         records.clear();
