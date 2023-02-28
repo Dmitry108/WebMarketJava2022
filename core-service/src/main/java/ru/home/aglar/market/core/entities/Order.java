@@ -21,7 +21,7 @@ public class Order {
 
 //    @ManyToOne
 //    @JoinColumn(name = "user_id")
-    @Column
+    @Column(name = "username")
     private String username;
 
     //cascade.persist позволяет сохранить orderitems в бд при сохранении orders каскадно

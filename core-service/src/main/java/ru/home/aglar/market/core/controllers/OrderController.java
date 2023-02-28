@@ -13,7 +13,7 @@ import ru.home.aglar.market.core.aspects.Timer;
 import java.security.Principal;
 import java.util.List;
 
-@Timer
+//@Timer
 @Slf4j
 @RestController
 @RequiredArgsConstructor

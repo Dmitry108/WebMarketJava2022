@@ -2,10 +2,10 @@ package ru.home.aglar.market.core.services;
 
 import lombok.RequiredArgsConstructor;
 import ru.home.aglar.market.common.exceptions.ResourceNotFoundException;
-import ru.home.aglar.market.core.dto.Cart;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import ru.home.aglar.market.core.dto.Cart;
 import ru.home.aglar.market.core.entities.Product;
 
 import java.util.UUID;
@@ -32,7 +32,9 @@ public class CartService {
         if (!redisTemplate.hasKey(cartKey)) {
             redisTemplate.opsForValue().set(cartKey, new Cart());
         }
-        return (Cart) redisTemplate.opsForValue().get(cartKey);
+        Cart cart = (Cart) redisTemplate.opsForValue().get(cartKey);
+        System.out.println(cart);
+        return cart;
     }
 
     private void execute(String cartKey, Consumer<Cart> consumer) {

@@ -25,7 +25,7 @@ angular.module('market').controller('CartController',
         };
 
         $scope.deleteRecord = function (id) {
-            $http.get(contextPath + "/carts/" + $localStorage.guestCartKey + "/delete/" + id)
+            $http.get(contextPath + "/cart/" + $localStorage.guestCartKey + "/delete/" + id)
                 .then(function () {
                     $scope.loadCart();
                 });

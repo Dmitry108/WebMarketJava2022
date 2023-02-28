@@ -3,11 +3,11 @@ package ru.home.aglar.market.core.controllers;
 import lombok.RequiredArgsConstructor;
 import ru.home.aglar.market.common.dto.StringResponse;
 import ru.home.aglar.market.core.aspects.Timer;
-import ru.home.aglar.market.core.dto.Cart;
 import org.springframework.web.bind.annotation.*;
+import ru.home.aglar.market.core.dto.Cart;
 import ru.home.aglar.market.core.services.CartService;
 
-@Timer
+//@Timer
 @RestController
 @RequestMapping("/api/v1/cart")
 @RequiredArgsConstructor
