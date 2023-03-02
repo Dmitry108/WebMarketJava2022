@@ -1,19 +1,12 @@
 package ru.home.aglar.market.common.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class StringResponse {
     private String value;
-
-    public StringResponse(String value) {
-        this.value = value;
-    }
-
-    public StringResponse() {}
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
 }

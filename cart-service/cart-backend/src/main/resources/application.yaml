@@ -1,0 +1,7 @@
+server:
+  port: 8091
+  servlet:
+    context-path: /market-cart
+utils:
+  cart:
+    prefix: marLiguros

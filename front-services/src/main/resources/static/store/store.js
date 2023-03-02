@@ -42,7 +42,7 @@ angular.module('market').controller('StoreController',
 
         $scope.addToCart = function (id) {
             //
-            $http.get(contextPath + "/cart/" + $localStorage.guestCartKey + "/add/" + id)
+            $http.get("http://localhost:8888/cart/api/v1/cart/" + $localStorage.guestCartKey + "/add/" + id)
                 .then(function (response) {
                 });
         };
