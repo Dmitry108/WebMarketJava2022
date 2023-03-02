@@ -33,8 +33,7 @@ build/
 .vscode/
 
 ### Security ###
-core-service/src/main/resources/secrets.properties
-auth-service/src/main/resources/secrets.properties
+auth-service/auth-backend/src/main/resources/secrets.properties
 gateway/src/main/resources/secrets.properties
 
 ### Database ###
