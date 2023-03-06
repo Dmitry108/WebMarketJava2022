@@ -1,0 +1,47 @@
+<div>
+    <h3>Корзина</h3>
+    <span ng-show="cart.records.length == 0">Ваша корзина пуста</span>
+    <table class="table" ng-show="cart.records.length > 0">
+        <thead>
+            <td>Продукт</td>
+            <td>Количество</td>
+            <td>Общая цена</td>
+            <td>Удалить</td>
+        </thead>
+        <tbody>
+            <tr ng-repeat="record in cart.records">
+                <td>{{record.title}}</td>
+                <td>
+                    <button class="btn btn-primary" ng-click="decreaseProductInCart(record.productId)">-</button>
+                    {{record.quantity}}
+                    <button class="btn btn-primary" ng-click="addToCart(record.productId)">+</button>
+                </td>
+                <td>{{record.price + " x " + record.quantity + " = " + record.totalPrice}}</td>
+                <td>
+                    <button class="btn btn-danger" ng-click="deleteRecord(record.productId)">Удалить</button>
+                </td>
+            </tr>
+            <tr>
+                <td>Итого:</td>
+                <td></td>
+                <td>{{cart.totalPrice}}</td>
+            </tr>
+    </table>
+    </table>
+    <p>
+        <button class="btn btn-secondary" ng-click="clearCart()">Очистить</button>
+    </p>
+    <h3>Детали заказа</h3>
+    <form novalidate>
+        <input class="form-control" type="text" placeholder="Телефон получателя" ng-model="orderDetails.phone">
+        <input class="form-control" type="text" placeholder="Адрес доставки" ng-model="orderDetails.address">
+    </form>
+    <br>
+    <button class="btn btn-primary" ng-show="isUserLoggedIn() && cart.records.length > 0"
+        ng-click="createOrder()">Оформить заказ</button>
+    <button class="btn btn-secondary" ng-show="!isUserLoggedIn() || cart.records.length == 0"
+        ng-click="disabledCheckOut()">Оформить заказ</button>
+</div>
+</body>
+
+</html>
