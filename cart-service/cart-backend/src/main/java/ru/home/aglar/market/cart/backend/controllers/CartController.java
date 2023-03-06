@@ -51,7 +51,7 @@ public class CartController {
     }
 
     @GetMapping("/{uuid}/merge")
-    public void mergeCarts(@RequestHeader(required = false) String username, @PathVariable String uuid) {
+    public void mergeCarts(@RequestHeader String username, @PathVariable String uuid) {
         String userCartKey = getCartKey(username, null);
         String guestCartKey = getCartKey(null, uuid);
         cartService.merge(userCartKey, guestCartKey);
