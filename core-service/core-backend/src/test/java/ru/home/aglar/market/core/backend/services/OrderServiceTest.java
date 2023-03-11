@@ -7,13 +7,12 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.*;
-import org.springframework.web.client.RestTemplate;
 import ru.home.aglar.market.cart.api.CartDto;
 import ru.home.aglar.market.cart.api.CartRecordDto;
 import ru.home.aglar.market.core.api.OrderDetailsDto;
 import ru.home.aglar.market.core.backend.entities.Order;
 import ru.home.aglar.market.core.backend.entities.Product;
+import ru.home.aglar.market.core.backend.integrations.CartServiceIntegration;
 import ru.home.aglar.market.core.backend.repositories.OrderRepository;
 
 import java.util.ArrayList;
@@ -30,7 +29,7 @@ public class OrderServiceTest {
     @MockBean
     private OrderRepository orderRepository;
     @MockBean
-    private RestTemplate restTemplate;
+    private CartServiceIntegration cartServiceIntegration;
 
     @Test
     public void addNewOrderTest() {
@@ -40,21 +39,8 @@ public class OrderServiceTest {
                 new CartRecordDto(2L, "Orange", 20, 3, 60));
         CartDto cartDto = new CartDto(new ArrayList<>(recordDtoList), 80);
 
-        Mockito.when(restTemplate.exchange(
-                ArgumentMatchers.anyString(),
-                ArgumentMatchers.eq(HttpMethod.GET),
-                ArgumentMatchers.any(),
-                ArgumentMatchers.<Class<CartDto>> any(),
-                ArgumentMatchers.anyString()))
-                        .thenReturn(new ResponseEntity<>(cartDto, HttpStatus.OK));
-
-        Mockito.when(restTemplate.execute(
-                        ArgumentMatchers.anyString(),
-                        ArgumentMatchers.eq(HttpMethod.GET),
-                        ArgumentMatchers.isNull(),
-                        ArgumentMatchers.isNull(),
-                        ArgumentMatchers.anyString()))
-                .thenReturn(null);
+        Mockito.doReturn(cartDto).when(cartServiceIntegration).getUserCart(ArgumentMatchers.anyString());
+        Mockito.doNothing().when(cartServiceIntegration).clearUserCart(ArgumentMatchers.anyString());
 
         Optional<Product> apple = Optional.of(new Product(1L, "Apple", 10));
         Optional<Product> orange = Optional.of(new Product(2L, "Orange", 20));
@@ -63,7 +49,6 @@ public class OrderServiceTest {
         Mockito.doReturn(orange).when(productService).getProductById(2L);
 
         orderService.addNewOrder("username", orderDetailsDto);
-//        Order order =
         Mockito.verify(orderRepository, Mockito.times(1)).save(
                 ArgumentMatchers.isA(Order.class));
 //        Assertions.assertEquals("Bob", order.getUsername());

@@ -2,10 +2,6 @@ package ru.home.aglar.market.core.backend.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.web.client.RestTemplate;
 import ru.home.aglar.market.cart.api.CartDto;
 import ru.home.aglar.market.common.exceptions.ResourceNotFoundException;
 import ru.home.aglar.market.core.backend.entities.Order;
@@ -14,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.home.aglar.market.core.api.OrderDetailsDto;
 import ru.home.aglar.market.core.backend.entities.OrderItem;
 import ru.home.aglar.market.core.backend.entities.Product;
+import ru.home.aglar.market.core.backend.integrations.CartServiceIntegration;
 import ru.home.aglar.market.core.backend.repositories.OrderRepository;
 
 import java.util.List;
@@ -24,14 +21,11 @@ import java.util.List;
 public class OrderService {
     private final ProductService productService;
     private final OrderRepository orderRepository;
-    private final RestTemplate restTemplate;
+    private final CartServiceIntegration cartServiceIntegration;
 
     @Transactional
     public void addNewOrder(String username, OrderDetailsDto orderDetailsDto) {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("username", username);
-        CartDto cartDto = restTemplate.exchange("http://localhost:8888/cart/api/v1/cart/{uuid}", HttpMethod.GET,
-                new HttpEntity<>("", httpHeaders), CartDto.class, "null").getBody();
+        CartDto cartDto = cartServiceIntegration.getUserCart(username);
         Order order = new Order();
         order.setUsername(username);
         order.setAddress(orderDetailsDto.getAddress());
@@ -51,8 +45,7 @@ public class OrderService {
                 }).toList();
         order.setOrderItems(orderItems);
         orderRepository.save(order);
-        restTemplate.execute("http://localhost:8888/cart/api/v1/cart/{uuid}/clear", HttpMethod.GET, null,
-                null, "null");
+        cartServiceIntegration.clearUserCart(username);
     }
 
     public List<Order> findOrdersByUsername(String username) {

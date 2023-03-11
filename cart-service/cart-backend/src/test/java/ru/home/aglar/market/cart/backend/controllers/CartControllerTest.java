@@ -12,6 +12,7 @@ import org.springframework.http.*;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 import ru.home.aglar.market.cart.backend.converters.CartConverter;
+import ru.home.aglar.market.cart.backend.intergations.ProductServiceIntegration;
 import ru.home.aglar.market.cart.backend.model.Cart;
 import ru.home.aglar.market.cart.backend.model.CartRecord;
 import ru.home.aglar.market.cart.backend.services.CartService;
@@ -42,7 +43,7 @@ public class CartControllerTest {
     @MockBean
     private CartService cartService;
     @MockBean
-    private RestTemplate restTemplate;
+    private ProductServiceIntegration productServiceIntegration;
 
     @BeforeEach
     public void init() {
@@ -101,9 +102,7 @@ public class CartControllerTest {
         ProductDto apple = new ProductDto(1L, "Apple", 20);
 
         given(cartService.getCurrentCart(USER_CART)).willReturn(cart);
-
-        given(restTemplate.getForObject(ArgumentMatchers.anyString(), ArgumentMatchers.<Class<ProductDto>> any(),
-                ArgumentMatchers.anyInt())).willReturn(apple);
+        given(productServiceIntegration.getProductById(ArgumentMatchers.anyLong())).willReturn(apple);
 
         mockMvc.perform(get("/api/v1/cart/uuid/add/1")
                 .contentType(MediaType.APPLICATION_JSON)

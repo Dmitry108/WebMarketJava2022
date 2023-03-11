@@ -2,9 +2,9 @@ package ru.home.aglar.market.cart.backend.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import ru.home.aglar.market.cart.api.CartDto;
 import ru.home.aglar.market.cart.backend.converters.CartConverter;
+import ru.home.aglar.market.cart.backend.intergations.ProductServiceIntegration;
 import ru.home.aglar.market.cart.backend.services.CartService;
 import ru.home.aglar.market.common.dto.StringResponse;
 import ru.home.aglar.market.core.api.ProductDto;
@@ -13,7 +13,7 @@ import ru.home.aglar.market.core.api.ProductDto;
 @RequestMapping("/api/v1/cart")
 @RequiredArgsConstructor
 public class CartController {
-    private final RestTemplate restTemplate;
+    private final ProductServiceIntegration productServiceIntegration;
     private final CartService cartService;
     private final CartConverter cartConverter;
 
@@ -30,8 +30,7 @@ public class CartController {
     @GetMapping("/{uuid}/add/{id}")
     public void addProductToCart(@RequestHeader(required = false) String username,
                                  @PathVariable String uuid, @PathVariable Long id) {
-        ProductDto productdto = restTemplate.getForObject("http://localhost:8888/core/api/v1/products/{id}",
-                ProductDto.class, id);
+        ProductDto productdto = productServiceIntegration.getProductById(id);
         cartService.addProduct(getCartKey(username, uuid), productdto);
     }
 
