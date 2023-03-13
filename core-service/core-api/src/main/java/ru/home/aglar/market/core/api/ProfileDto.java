@@ -1,6 +1,9 @@
 package ru.home.aglar.market.core.api;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class ProfileDto {
+    @Schema(description = "Unique username", requiredMode = Schema.RequiredMode.REQUIRED)
     private String username;
 //    private String email;
 

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.home.aglar.market.cart.api.CartDto;
 import ru.home.aglar.market.cart.backend.converters.CartConverter;
+import ru.home.aglar.market.cart.backend.exceptions.CartIsBrokenException;
 import ru.home.aglar.market.cart.backend.intergations.ProductServiceIntegration;
 import ru.home.aglar.market.cart.backend.services.CartService;
 import ru.home.aglar.market.common.dto.StringResponse;
