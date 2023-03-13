@@ -73,7 +73,7 @@ public class ProductController {
     @PutMapping
     @Operation(summary = "Updating product in database", responses = {
             @ApiResponse(description = "Success response", responseCode = "200"),
-            @ApiResponse(description = "Product validation errors", responseCode = "401",
+            @ApiResponse(description = "Product validation errors", responseCode = "400",
                     content = @Content(schema = @Schema(implementation = ValidationError.class)))})
     public void updateProduct(@RequestBody @Parameter(description = "Product for updating") ProductDto productDto) {
         productValidator.validate(productDto);

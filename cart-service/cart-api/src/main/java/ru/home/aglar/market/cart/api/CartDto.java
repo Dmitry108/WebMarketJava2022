@@ -3,6 +3,7 @@ package ru.home.aglar.market.cart.api;
 import java.util.List;
 
 public class CartDto {
+
     private List<CartRecordDto> records;
     private Integer totalPrice;
 
