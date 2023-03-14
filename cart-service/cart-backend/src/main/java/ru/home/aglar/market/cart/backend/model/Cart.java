@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.home.aglar.market.core.api.ProductDto;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,15 +12,15 @@ import java.util.List;
 @AllArgsConstructor
 public class Cart {
     private List<CartRecord> records;
-    private Integer totalPrice;
+    private BigDecimal totalPrice;
 
     public Cart() {
         records = new ArrayList<>();
     }
 
     private void recalculate() {
-        totalPrice = 0;
-        records.forEach(record -> totalPrice += record.getTotalPrice());
+        totalPrice = BigDecimal.ZERO;
+        records.forEach(record -> totalPrice = totalPrice.add(record.getTotalPrice()));
     }
 
     public void addProduct(ProductDto productDto) {
@@ -44,7 +45,7 @@ public class Cart {
 
     public void clear() {
         records.clear();
-        totalPrice = 0;
+        totalPrice = BigDecimal.ZERO;
     }
     public void deleteProduct(Long id) {
         records.removeIf(record -> record.getProductId().equals(id));

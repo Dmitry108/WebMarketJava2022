@@ -15,6 +15,7 @@ import ru.home.aglar.market.core.backend.entities.Product;
 import ru.home.aglar.market.core.backend.integrations.CartServiceIntegration;
 import ru.home.aglar.market.core.backend.repositories.OrderRepository;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,15 +36,15 @@ public class OrderServiceTest {
     public void addNewOrderTest() {
         OrderDetailsDto orderDetailsDto = new OrderDetailsDto("111-11-11", "Moscow");
         List<CartRecordDto> recordDtoList = List.of(
-                new CartRecordDto(1L, "Apple", 10, 2, 20),
-                new CartRecordDto(2L, "Orange", 20, 3, 60));
-        CartDto cartDto = new CartDto(new ArrayList<>(recordDtoList), 80);
+                new CartRecordDto(1L, "Apple", BigDecimal.TEN, 2, BigDecimal.valueOf(20)),
+                new CartRecordDto(2L, "Orange", BigDecimal.valueOf(20), 3, BigDecimal.valueOf(60)));
+        CartDto cartDto = new CartDto(new ArrayList<>(recordDtoList), BigDecimal.valueOf(80));
 
         Mockito.doReturn(cartDto).when(cartServiceIntegration).getUserCart(ArgumentMatchers.anyString());
         Mockito.doNothing().when(cartServiceIntegration).clearUserCart(ArgumentMatchers.anyString());
 
-        Optional<Product> apple = Optional.of(new Product(1L, "Apple", 10));
-        Optional<Product> orange = Optional.of(new Product(2L, "Orange", 20));
+        Optional<Product> apple = Optional.of(new Product(1L, "Apple", BigDecimal.TEN));
+        Optional<Product> orange = Optional.of(new Product(2L, "Orange", BigDecimal.valueOf(20)));
 
         Mockito.doReturn(apple).when(productService).getProductById(1L);
         Mockito.doReturn(orange).when(productService).getProductById(2L);
