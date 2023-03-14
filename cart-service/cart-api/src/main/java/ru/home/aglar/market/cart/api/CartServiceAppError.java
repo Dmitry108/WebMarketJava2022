@@ -4,7 +4,7 @@ import ru.home.aglar.market.common.exceptions.AppError;
 
 public class CartServiceAppError extends AppError {
     public enum CartServiceErrors {
-        CART_IS_BROKEN, CART_NOT_FOUND
+        CART_IS_BROKEN, CART_NOT_FOUND, CORE_SERVICE_INTEGRATION
     }
 
     public CartServiceAppError(String code, String message) {

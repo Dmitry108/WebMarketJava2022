@@ -6,7 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.home.aglar.market.cart.api.CartServiceAppError;
+import ru.home.aglar.market.common.exceptions.AppError;
 import ru.home.aglar.market.common.exceptions.ResourceNotFoundException;
+import ru.home.aglar.market.core.api.CoreServiceAppError;
 
 @ControllerAdvice
 @Slf4j
@@ -25,5 +27,12 @@ public class GlobalExceptionHandler {
                 new CartServiceAppError(CartServiceAppError.CartServiceErrors.CART_IS_BROKEN.name(),
                 e.getMessage()),
                 HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<CartServiceAppError> catchCoreServiceIntegrationException(CoreServiceIntegrationException e) {
+        log.error(e.getMessage(), e);
+        return new ResponseEntity<>(new CartServiceAppError(CartServiceAppError.CartServiceErrors.CORE_SERVICE_INTEGRATION.name(),
+                e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

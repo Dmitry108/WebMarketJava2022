@@ -31,8 +31,6 @@ public class CartServiceIntegration {
                 .onStatus(HttpStatus::is4xxClientError, clientResponse ->
                         clientResponse.bodyToMono(CartServiceAppError.class).map(
                         body -> {
-                            System.out.println(body.getClass().getTypeName() +" "+
-                                    body + " " + body.getCode() + " " + body.getMessage());
                             if (body.getCode().equals(CartServiceAppError.CartServiceErrors.CART_NOT_FOUND.name())) {
                                 return new CartServiceIntegrationException("Incorrect request to cart-service: cart not found");
                             }
