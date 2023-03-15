@@ -6,11 +6,9 @@ import io.netty.handler.timeout.WriteTimeoutHandler;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
@@ -19,7 +17,7 @@ import reactor.netty.tcp.TcpClient;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
-@EnableConfigurationProperties(CartServiceIntegrationProperties.class)
+@EnableConfigurationProperties({CartServiceIntegrationProperties.class, TimeoutsCartServiceIntegrationsProperties.class})
 //@PropertySource("classpath:application.yaml")
 @RequiredArgsConstructor
 public class CoreApp {
@@ -31,10 +29,10 @@ public class CoreApp {
     public WebClient cartServiceWebClient() {
         TcpClient tcpClient = TcpClient
                 .create()
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, properties.getConnectTimeout())
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, properties.getTimeouts().getConnection())
                 .doOnConnected(connection -> {
-                        connection.addHandlerLast(new ReadTimeoutHandler(properties.getConnectTimeout(), TimeUnit.MILLISECONDS));
-                        connection.addHandlerLast(new WriteTimeoutHandler(properties.getWriteTimeout(), TimeUnit.MILLISECONDS));
+                        connection.addHandlerLast(new ReadTimeoutHandler(properties.getTimeouts().getReading(), TimeUnit.MILLISECONDS));
+                        connection.addHandlerLast(new WriteTimeoutHandler(properties.getTimeouts().getWriting(), TimeUnit.MILLISECONDS));
                 });
         return WebClient.builder()
                 .baseUrl(properties.getUrl())

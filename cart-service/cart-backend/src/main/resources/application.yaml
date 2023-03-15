@@ -5,9 +5,10 @@ server:
 utils:
   cart:
     prefix: marLiguros
-integration:
+integrations:
   core-service:
     url: http://localhost:8888/core
-    connect-timeout: 2000
-    read-timeout: 10000
-    write-timeout: 2000
+    timeouts:
+      connection: 2000
+      reading: 10000
+      writing: 2000

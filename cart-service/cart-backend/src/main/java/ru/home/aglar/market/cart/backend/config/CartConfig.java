@@ -4,7 +4,6 @@ import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,21 +15,21 @@ import reactor.netty.tcp.TcpClient;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
-@EnableConfigurationProperties(CoreServiceIntegrationProperties.class)
+@EnableConfigurationProperties({CoreServiceIntegrationsProperties.class, TimeoutsCoreServiceIntegrationsProperties.class})
 @RequiredArgsConstructor
 public class CartConfig {
 //    @Value("${integration.core-service.url}")
 //    private String coreServiceUrl;
-    private final CoreServiceIntegrationProperties integrationProperties;
+    private final CoreServiceIntegrationsProperties integrationProperties;
 
     @Bean
     public WebClient productServiceWebClient() {
         TcpClient tcpClient = TcpClient
                 .create()
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, integrationProperties.getConnectTimeout())
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, integrationProperties.getTimeouts().getConnection())
                 .doOnConnected(connection -> {
-                    connection.addHandlerLast(new ReadTimeoutHandler(integrationProperties.getReadTimeout(), TimeUnit.MILLISECONDS));
-                    connection.addHandlerLast(new WriteTimeoutHandler(integrationProperties.getWriteTimeout(), TimeUnit.MILLISECONDS));
+                    connection.addHandlerLast(new ReadTimeoutHandler(integrationProperties.getTimeouts().getReading(), TimeUnit.MILLISECONDS));
+                    connection.addHandlerLast(new WriteTimeoutHandler(integrationProperties.getTimeouts().getWriting(), TimeUnit.MILLISECONDS));
                 });
         return WebClient.builder()
                 .baseUrl(integrationProperties.getUrl())
