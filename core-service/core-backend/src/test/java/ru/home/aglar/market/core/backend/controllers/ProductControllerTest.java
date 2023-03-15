@@ -19,6 +19,7 @@ import ru.home.aglar.market.core.backend.entities.Product;
 import ru.home.aglar.market.core.backend.services.ProductService;
 import ru.home.aglar.market.core.backend.validations.ProductValidator;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,8 +46,8 @@ public class ProductControllerTest {
 
     @Test
     public void getProductByIdTest() throws Exception {
-        Product apple = new Product(1L, "Apple", 10);
-        ProductDto appleDto = new ProductDto(1L, "Apple", 10);
+        Product apple = new Product(1L, "Apple", BigDecimal.TEN);
+        ProductDto appleDto = new ProductDto(1L, "Apple", BigDecimal.TEN);
         Mockito.when(productService.getProductById(1L)).thenReturn(Optional.of(apple));
 
         mockMvc.perform(get("/api/v1/products/1")
@@ -64,13 +65,13 @@ public class ProductControllerTest {
     @Test
     public void getAllProductsTest() throws Exception {
         List<Product> products = List.of(
-                new Product(1L, "Apple", 10),
-                new Product(2L, "Orange", 20));
+                new Product(1L, "Apple", BigDecimal.TEN),
+                new Product(2L, "Orange", BigDecimal.valueOf(20)));
         Page<Product> page = new PageImpl<>(products);
 
         List<ProductDto> productDtoList = List.of(
-                new ProductDto(1L, "Apple", 10),
-                new ProductDto(2L, "Orange", 20));
+                new ProductDto(1L, "Apple", BigDecimal.TEN),
+                new ProductDto(2L, "Orange", BigDecimal.valueOf(20)));
         Page<ProductDto> pageDto = new PageImpl<>(productDtoList);
         Mockito.when(productService.getAllProducts(1, null, null))
                 .thenReturn(page);
@@ -84,8 +85,8 @@ public class ProductControllerTest {
 
     @Test
     public void addNewProductTest() throws Exception {
-        Product product = new Product(1L, "Apple", 10);
-        ProductDto productDto = new ProductDto(1L, "Apple", 10);
+        Product product = new Product(1L, "Apple", BigDecimal.TEN);
+        ProductDto productDto = new ProductDto(1L, "Apple", BigDecimal.TEN);
 
         Mockito.when(productService.addProduct(ArgumentMatchers.any())).thenReturn(product);
 
@@ -93,7 +94,7 @@ public class ProductControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productDto)))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(result -> jsonPath("$", is(product)));
     }
 
@@ -107,8 +108,8 @@ public class ProductControllerTest {
     }
     @Test
     public void updateProductTest() throws Exception {
-        Product apple = new Product(1L, "Apple", 10);
-        Product notValid = new Product(1L, "Apple", -10);
+        Product apple = new Product(1L, "Apple", BigDecimal.TEN);
+        Product notValid = new Product(1L, "Apple", BigDecimal.valueOf(-10));
         Mockito.doNothing().when(productService).updateProduct(apple);
         mockMvc.perform(put("/api/v1/products")
                         .contentType(MediaType.APPLICATION_JSON)

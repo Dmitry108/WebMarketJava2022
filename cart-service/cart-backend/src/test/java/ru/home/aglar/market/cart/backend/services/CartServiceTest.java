@@ -13,6 +13,7 @@ import ru.home.aglar.market.cart.backend.model.Cart;
 import ru.home.aglar.market.cart.backend.model.CartRecord;
 import ru.home.aglar.market.core.api.ProductDto;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,9 +34,9 @@ public class CartServiceTest {
     @BeforeEach
     public void initCart() {
         List<CartRecord> records = Arrays.asList(
-                new CartRecord(1L, "Apple", 10, 2, 20),
-                new CartRecord(2L, "Orange", 20, 3, 60));
-        cart = new Cart(new ArrayList<>(records), 80);
+                new CartRecord(1L, "Apple", BigDecimal.valueOf(10), 2, BigDecimal.valueOf(20)),
+                new CartRecord(2L, "Orange", BigDecimal.valueOf(20), 3, BigDecimal.valueOf(60)));
+        cart = new Cart(new ArrayList<>(records), BigDecimal.valueOf(80));
     }
 
     @Test
@@ -63,7 +64,7 @@ public class CartServiceTest {
     @Test
     public void executeCartFunctions() {
         String myCartKey = "myCart";
-        ProductDto apple = new ProductDto(3L, "Mellon", 30);
+        ProductDto apple = new ProductDto(3L, "Mellon", BigDecimal.valueOf(30));
         Mockito.doReturn(valueOperations).when(redisTemplate).opsForValue();
         Mockito.doReturn(cart).when(valueOperations).get(myCartKey);
         cartService.addProduct(myCartKey, apple);
@@ -90,9 +91,9 @@ public class CartServiceTest {
         String myCartKey = "myCart";
         String anotherCartKey = "anotherCart";
         List<CartRecord> records = Arrays.asList(
-                new CartRecord(1L, "Apple", 10, 1, 10),
-                new CartRecord(3L, "Mellon", 30, 2, 60));
-        Cart anotherCart = new Cart(new ArrayList<>(records), 70);
+                new CartRecord(1L, "Apple", BigDecimal.valueOf(10), 1, BigDecimal.valueOf(10)),
+                new CartRecord(3L, "Mellon", BigDecimal.valueOf(30), 2, BigDecimal.valueOf(60)));
+        Cart anotherCart = new Cart(new ArrayList<>(records), BigDecimal.valueOf(70));
         Mockito.doReturn(valueOperations).when(redisTemplate).opsForValue();
         Mockito.doReturn(cart).when(valueOperations).get(myCartKey);
         Mockito.doReturn(anotherCart).when(valueOperations).get(anotherCartKey);

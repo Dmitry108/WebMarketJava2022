@@ -14,6 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import ru.home.aglar.market.core.backend.entities.Product;
 import ru.home.aglar.market.core.backend.repositories.ProductRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +28,7 @@ public class ProductServiceTest {
 
     @Test
     public void getProductByIdTest() {
-        Optional<Product> product = Optional.of(new Product(1L, "Apple", 10));
+        Optional<Product> product = Optional.of(new Product(1L, "Apple", BigDecimal.TEN));
         Mockito.doReturn(product).when(productRepository).findById(1L);
         Assertions.assertEquals(product, productService.getProductById(1L));
     }
@@ -35,8 +36,8 @@ public class ProductServiceTest {
     @Test
     public void getAllProductsTest() {
         List<Product> products = List.of(
-                new Product(1L, "Apple", 10),
-                new Product(2L, "Orange", 20));
+                new Product(1L, "Apple", BigDecimal.TEN),
+                new Product(2L, "Orange", BigDecimal.valueOf(20)));
         Page<Product> page = new PageImpl<>(products);
 
         Mockito.when(productRepository.findAll(
@@ -54,7 +55,7 @@ public class ProductServiceTest {
 
     @Test
     public void updateProductTest () {
-        Product product = new Product(1L, "Apple", 10);
+        Product product = new Product(1L, "Apple", BigDecimal.TEN);
         productService.updateProduct(product);
         Mockito.verify(productRepository, Mockito.times(1))
                 .save(ArgumentMatchers.eq(product));

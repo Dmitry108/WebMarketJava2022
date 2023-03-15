@@ -1,19 +1,29 @@
 package ru.home.aglar.market.core.api;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import java.math.BigDecimal;
 import java.util.List;
 
+@Schema(description = "Model of order")
 public class OrderDto {
+    @Schema(description = "Id", requiredMode = Schema.RequiredMode.REQUIRED)
     private Long id;
+    @Schema(description = "Unique username", requiredMode = Schema.RequiredMode.REQUIRED)
     private String username;
+    @Schema(description = "List of order's items", requiredMode = Schema.RequiredMode.REQUIRED)
     private List<OrderItemDto> orderItems;
-    private Integer totalPrice;
+    @Schema(description = "Total price of hole order", requiredMode = Schema.RequiredMode.REQUIRED)
+    private BigDecimal totalPrice;
+    @Schema(description = "User's address", requiredMode = Schema.RequiredMode.REQUIRED)
     private String address;
+    @Schema(description = "User's phone", requiredMode = Schema.RequiredMode.REQUIRED)
     private String phone;
 
     public OrderDto() {
     }
 
-    public OrderDto(Long id, String username, List<OrderItemDto> orderItems, Integer totalPrice, String address, String phone) {
+    public OrderDto(Long id, String username, List<OrderItemDto> orderItems, BigDecimal totalPrice, String address, String phone) {
         this.id = id;
         this.username = username;
         this.orderItems = orderItems;
@@ -46,11 +56,11 @@ public class OrderDto {
         this.orderItems = orderItems;
     }
 
-    public Integer getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Integer totalPrice) {
+    public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
 

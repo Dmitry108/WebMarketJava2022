@@ -1,6 +1,9 @@
 package ru.home.aglar.auth.api;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class JwtResponse {
+    @Schema(description = "Token", requiredMode = Schema.RequiredMode.REQUIRED)
     private String token;
 
     public JwtResponse() {

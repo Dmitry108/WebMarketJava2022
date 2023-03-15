@@ -1,17 +1,19 @@
 package ru.home.aglar.market.cart.api;
 
+import java.math.BigDecimal;
+
 public class CartRecordDto {
     private Long productId;
     private String title;
-    private Integer price;
+    private BigDecimal price;
     private Integer quantity;
-    private Integer totalPrice;
+    private BigDecimal totalPrice;
 
     public CartRecordDto() {
     }
 
     public CartRecordDto(Long productId, String title,
-                         Integer price, Integer quantity, Integer totalPrice) {
+                         BigDecimal price, Integer quantity, BigDecimal totalPrice) {
         this.productId = productId;
         this.title = title;
         this.price = price;
@@ -35,11 +37,11 @@ public class CartRecordDto {
         this.title = title;
     }
 
-    public Integer getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -51,11 +53,11 @@ public class CartRecordDto {
         this.quantity = quantity;
     }
 
-    public Integer getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Integer totalPrice) {
+    public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
 }

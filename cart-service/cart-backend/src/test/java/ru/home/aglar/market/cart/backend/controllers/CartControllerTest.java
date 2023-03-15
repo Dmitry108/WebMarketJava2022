@@ -12,11 +12,13 @@ import org.springframework.http.*;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 import ru.home.aglar.market.cart.backend.converters.CartConverter;
+import ru.home.aglar.market.cart.backend.intergations.ProductServiceIntegration;
 import ru.home.aglar.market.cart.backend.model.Cart;
 import ru.home.aglar.market.cart.backend.model.CartRecord;
 import ru.home.aglar.market.cart.backend.services.CartService;
 import ru.home.aglar.market.core.api.ProductDto;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,7 +44,7 @@ public class CartControllerTest {
     @MockBean
     private CartService cartService;
     @MockBean
-    private RestTemplate restTemplate;
+    private ProductServiceIntegration productServiceIntegration;
 
     @BeforeEach
     public void init() {
@@ -55,9 +57,9 @@ public class CartControllerTest {
     @Test
     public void getCartTest() throws Exception {
         List<CartRecord> records = Arrays.asList(
-                new CartRecord(1L, "Apple", 20, 2, 40),
-                new CartRecord(2L, "Orange", 30, 3, 90));
-        Cart cart = new Cart(new ArrayList<>(records), 140);
+                new CartRecord(1L, "Apple", BigDecimal.valueOf(20), 2, BigDecimal.valueOf(40)),
+                new CartRecord(2L, "Orange", BigDecimal.valueOf(30), 3, BigDecimal.valueOf(90)));
+        Cart cart = new Cart(new ArrayList<>(records), BigDecimal.valueOf(140));
 
         given(cartService.getCurrentCart(USER_CART)).willReturn(cart);
         mockMvc.perform(get("/api/v1/cart/uuid")
@@ -67,11 +69,11 @@ public class CartControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isNotEmpty())
                 .andExpect(jsonPath("$.records[0].title", is(cart.getRecords().get(0).getTitle())))
-                .andExpect(jsonPath("$.totalPrice", is(cart.getTotalPrice())));
+                .andExpect(jsonPath("$.totalPrice", is(cart.getTotalPrice().intValue())));
 
         List<CartRecord> guestRecords = List.of(
-                new CartRecord(3L, "Mellon", 40, 2, 80));
-        Cart guestCart = new Cart(new ArrayList<>(guestRecords), 80);
+                new CartRecord(3L, "Mellon", BigDecimal.valueOf(40), 2, BigDecimal.valueOf(80)));
+        Cart guestCart = new Cart(new ArrayList<>(guestRecords), BigDecimal.valueOf(80));
         given(cartService.getCurrentCart(GUEST_CART)).willReturn(guestCart);
 
         mockMvc.perform(get("/api/v1/cart/uuid")
@@ -80,7 +82,7 @@ public class CartControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isNotEmpty())
                 .andExpect(jsonPath("$.records[0].title", is("Mellon")))//is(guestCart.getRecords().get(0).getTitle())))
-                .andExpect(jsonPath("$.totalPrice", is(guestCart.getTotalPrice())));
+                .andExpect(jsonPath("$.totalPrice", is(guestCart.getTotalPrice().intValue())));
     }
 
     @Test
@@ -96,14 +98,12 @@ public class CartControllerTest {
     @Test
     public void addProductToCart() throws Exception {
         List<CartRecord> records = List.of(
-                new CartRecord(2L, "Orange", 30, 3, 90));
-        Cart cart = new Cart(new ArrayList<>(records), 90);
-        ProductDto apple = new ProductDto(1L, "Apple", 20);
+                new CartRecord(2L, "Orange", BigDecimal.valueOf(30), 3, BigDecimal.valueOf(90)));
+        Cart cart = new Cart(new ArrayList<>(records), BigDecimal.valueOf(90));
+        ProductDto apple = new ProductDto(1L, "Apple", BigDecimal.valueOf(20));
 
         given(cartService.getCurrentCart(USER_CART)).willReturn(cart);
-
-        given(restTemplate.getForObject(ArgumentMatchers.anyString(), ArgumentMatchers.<Class<ProductDto>> any(),
-                ArgumentMatchers.anyInt())).willReturn(apple);
+        given(productServiceIntegration.getProductById(ArgumentMatchers.anyLong())).willReturn(apple);
 
         mockMvc.perform(get("/api/v1/cart/uuid/add/1")
                 .contentType(MediaType.APPLICATION_JSON)

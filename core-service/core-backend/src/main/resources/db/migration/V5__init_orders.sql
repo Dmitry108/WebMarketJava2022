@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS orders (
     id          BIGSERIAL PRIMARY KEY,
 --    user_id     BIGINT NOT NULL REFERENCES users (id),
     username VARCHAR(255) NOT NULL,
-    total_price INT NOT NULL,
+    total_price NUMERIC(8, 2) NOT NULL,
     address     VARCHAR(255),
     phone       VARCHAR(255),
     created_at  TIMESTAMP DEFAULT current_timestamp,
@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS order_items (
     order_id            BIGINT NOT NULL REFERENCES orders (id),
     product_id          BIGINT NOT NULL REFERENCES products (id),
     quantity            INT NOT NULL,
-    price_per_product   INT NOT NULL,
-    price               INT NOT NULL,
+    price_per_product   NUMERIC(8, 2) NOT NULL,
+    price               NUMERIC(8, 2) NOT NULL,
     created_at  TIMESTAMP DEFAULT current_timestamp,
     updated_at  TIMESTAMP DEFAULT current_timestamp
 );

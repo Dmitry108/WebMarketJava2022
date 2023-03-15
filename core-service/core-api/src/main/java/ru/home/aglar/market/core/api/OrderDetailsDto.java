@@ -1,7 +1,12 @@
 package ru.home.aglar.market.core.api;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Model of order details")
 public class OrderDetailsDto {
+    @Schema(description = "User's phone", requiredMode = Schema.RequiredMode.REQUIRED)
     private String phone;
+    @Schema(description = "User's address", requiredMode = Schema.RequiredMode.REQUIRED)
     private String address;
 
     public OrderDetailsDto() {

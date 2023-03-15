@@ -1,7 +1,11 @@
 package ru.home.aglar.auth.api;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class JwtRequest {
+    @Schema(description = "Unique username", requiredMode = Schema.RequiredMode.REQUIRED)
     private String username;
+    @Schema(description = "Password", requiredMode = Schema.RequiredMode.REQUIRED)
     private String password;
 
     public JwtRequest() {
