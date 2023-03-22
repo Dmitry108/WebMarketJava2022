@@ -13,3 +13,10 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQL94Dialect
+integrations:
+  cart-service:
+    url: http://localhost:8888/cart
+    timeouts:
+      connection: 2000
+      reading: 10000
+      writing: 2000

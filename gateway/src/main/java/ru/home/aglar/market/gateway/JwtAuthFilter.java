@@ -45,7 +45,7 @@ public class JwtAuthFilter extends AbstractGatewayFilterFactory<JwtAuthFilter.Co
     }
 
     private String getAuthHeader(org.springframework.http.server.reactive.ServerHttpRequest request) {
-        return request.getHeaders().getOrEmpty("Authorization").get(0).substring(7);
+        return request.getHeaders().getOrEmpty("Authorization").get(0);
     }
 
     private boolean isAuthMissing(org.springframework.http.server.reactive.ServerHttpRequest request) {
